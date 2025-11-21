@@ -1,0 +1,283 @@
+/**
+ * Dashboard Page Styles
+ */
+
+.dashboard-container {
+  min-height: 100vh;
+  background-color: var(--light-bg);
+  transition: background-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated gradient background for dashboard */
+.dashboard-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(120deg, var(--dash-grad-1) 0%, var(--dash-grad-2) 50%, var(--dash-grad-3) 100%);
+    opacity: 0.92;
+    transform: scale(1.06);
+    filter: blur(14px);
+    animation: dashShift var(--anim-speed) linear infinite;
+}
+
+@keyframes dashShift {
+  0% { transform: translateX(-6%) scale(1.04); }
+  50% { transform: translateX(6%) scale(1.06); }
+  100% { transform: translateX(-6%) scale(1.04); }
+}
+
+.dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px 40px 16px;
+}
+
+/* Ensure content sits above animated background */
+.dashboard-content,
+.dashboard-header,
+.upload-section,
+.analytics-section,
+.filter-section,
+.dashboard-main {
+  position: relative;
+  z-index: 1;
+}
+
+/* Banner under header */
+.dashboard-banner {
+  margin: 16px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  /* banner uses theme-aware variables */
+  background: linear-gradient(90deg, var(--banner-grad-1), var(--banner-grad-2));
+  box-shadow: 0 6px 20px rgba(15,23,42,0.08);
+}
+
+.banner-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+}
+
+.banner-marquee {
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.banner-text {
+  display: inline-block;
+  color: var(--white);
+  font-weight: 700;
+  white-space: nowrap;
+  transform: translateX(-100%);
+    animation: marqueeLR calc(var(--anim-speed) * 1.0) linear infinite;
+}
+
+.banner-username {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  color: var(--white);
+  padding: 6px 10px;
+  border-radius: 14px;
+  margin-right: 12px;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(15,23,42,0.12);
+}
+
+.banner-message {
+  display: inline-block;
+}
+
+.banner-timestamp {
+  color: rgba(255,255,255,0.95);
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+  margin-left: 12px;
+}
+
+@keyframes marqueeLR {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner-text {
+    animation: none;
+    transform: none;
+  }
+}
+
+.dashboard-header {
+  background-color: var(--white);
+  padding: 16px 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+/* Glass effect for cards to improve contrast over animated background */
+.card-glass {
+  background-color: rgba(255,255,255,var(--card-opacity));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Dark-theme override for glass (use solid darker card color) */
+:root[data-theme='dark'] .card-glass,
+[data-theme='dark'] .card-glass {
+  background-color: var(--white);
+}
+  flex-wrap: wrap;
+  border-bottom: 3px solid var(--secondary-color);
+  transition: background-color 0.3s ease;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dashboard-header h1 {
+  font-size: 28px;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.user-info {
+  font-size: 14px;
+  color: var(--text-light);
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Upload Section */
+.upload-section {
+  background-color: var(--white);
+  padding: 16px;
+  margin: 20px 0;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  transition: background-color 0.3s ease;
+}
+
+/* Analytics Section */
+.analytics-section {
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+/* Filter Section */
+.filter-section {
+  background-color: var(--white);
+  padding: 16px;
+  margin: 20px 0;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  transition: background-color 0.3s ease;
+}
+
+.filter-section h2 {
+  margin-bottom: 15px;
+  color: var(--primary-color);
+  font-size: 18px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: 2px solid var(--border-color);
+  background-color: var(--white);
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+  color: var(--text-dark);
+}
+
+.filter-btn:hover {
+  border-color: var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.filter-btn.active {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  color: var(--white);
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-light);
+}
+
+/* Main two-column layout for larger screens */
+.dashboard-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.dashboard-main .left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dashboard-main .right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (max-width: 992px) {
+  .dashboard-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-right {
+    width: 100%;
+  }
+
+  .header-right .btn {
+    width: 100%;
+  }
+
+  .dashboard-header h1 {
+    font-size: 22px;
+  }
+
+  .filter-buttons {
+    flex-direction: column;
+  }
+
+  .filter-btn {
+    width: 100%;
+  }
+}
+

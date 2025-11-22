@@ -18,6 +18,19 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       localStorage.setItem('token', token);
+      // Restore user session if token exists but user is missing
+      if (!user) {
+        setLoading(true);
+        axios.get('/api/auth/me')
+          .then((response) => {
+            setUser(response.data.user);
+          })
+          .catch(() => {
+            setToken(null);
+            setUser(null);
+          })
+          .finally(() => setLoading(false));
+      }
     } else {
       delete axios.defaults.headers.common['Authorization'];
       localStorage.removeItem('token');

@@ -1,3 +1,22 @@
+/* Feedback List Wrapper improvements */
+.feedback-list-wrapper {
+  min-height: 240px;
+  padding: 24px 16px;
+  background: var(--white);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-feedback {
+  text-align: center;
+  color: var(--text-light);
+  font-size: 18px;
+  padding: 40px 0;
+  width: 100%;
+}
 /**
  * Dashboard Page Styles
  */
@@ -79,7 +98,7 @@
 
 .banner-username {
   display: inline-block;
-  background: rgba(255,255,255,0.12);
+  background: rgba(248, 244, 244, 0.12);
   color: var(--white);
   padding: 6px 10px;
   border-radius: 14px;
@@ -93,7 +112,7 @@
 }
 
 .banner-timestamp {
-  color: rgba(255,255,255,0.95);
+  color: rgba(245, 239, 239, 0.95);
   font-weight: 700;
   font-size: 14px;
   white-space: nowrap;

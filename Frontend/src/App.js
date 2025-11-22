@@ -12,6 +12,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import AdminPage from './pages/AdminPage';
 import UserSettings from './pages/UserSettings';
+import LandingPage from './pages/LandingPage';
 import './App.css';
 
 // Protected Route Component
@@ -66,7 +67,7 @@ function AppContent() {
             </AdminRoute>
           }
         />
-        <Route path="/" element={<Navigate to="/dashboard" />} />
+        <Route path="/" element={<LandingPage />} />
       </Routes>
     </Router>
   );

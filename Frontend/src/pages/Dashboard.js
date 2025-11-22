@@ -14,7 +14,7 @@ import '../styles/Dashboard.css';
 import { feedbackService } from '../services/feedbackService';
 
 const Dashboard = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, loading: authLoading, isAuthenticated } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const [feedback, setFeedback] = useState([]);
   const [stats, setStats] = useState(null);
@@ -37,121 +37,132 @@ const Dashboard = () => {
     return () => { didCancel = true; };
   }, [user]);
 
+  // Live timestamp updater
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   // read saved layout on mount
   useEffect(() => {
     try {
       const v = localStorage.getItem('dashboardLayout');
       if (v) setLayout(JSON.parse(v));
     } catch (e) {
-      setLayout(defaultLayout);
+      // ignore layout errors
     }
   }, []);
 
-  useEffect(() => {
-    const t = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(t);
-  }, []);
+  // Filter feedback by sentiment
+  const filteredFeedback =
+    filter === 'All'
+      ? feedback
+      : feedback.filter((f) => f.sentiment.label === filter);
 
-  const loadFeedback = async () => {
-    try {
-      setLoading(true);
-      const data = await feedbackService.getAllFeedback();
-      setFeedback(data.data);
-      setStats(data.stats);
-      setError('');
-    } catch (err) {
-      setError('Failed to load feedback');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Handle filter change
   const handleFilterChange = (sentiment) => {
     setFilter(sentiment);
   };
 
+  // Handle upload success
   const handleUploadSuccess = () => {
-     setShowUpload(false);
-     loadFeedback();
+    loadFeedback();
+    setShowUpload(false);
   };
 
+  // Handle feedback delete
   const handleDeleteFeedback = async (id) => {
     try {
-      await feedbackService.deleteFeedback(id);
-        setFeedback((prev) => prev.filter((f) => f._id !== id));
+      await feedbackService.deleteFeedback(id, user.token);
+      await loadFeedback();
     } catch (err) {
       setError('Failed to delete feedback');
     }
   };
 
-  const filteredFeedback =
-      filter === 'All'
-        ? feedback
-        : feedback.filter((f) => f.sentiment.label === filter);
-
-    // Clear feedback state on logout
-    useEffect(() => {
-      if (!user) {
-        setFeedback([]);
-        setStats(null);
-      }
-    }, [user]);
+  // Load feedback and stats
+  async function loadFeedback() {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await feedbackService.getAllFeedback(user.token);
+      setFeedback(res.data || []);
+      setStats(res.stats || null);
+    } catch (err) {
+      setError('Failed to load feedback');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="dashboard-container">
       <div className="dashboard-content">
-      {/* Header */}
-      <header className="dashboard-header">
-        <div className="header-left">
-          <h1>SentiView Dashboard</h1>
-          {user && <p className="user-info">Welcome, {user.username}!</p>}
-        </div>
-        <div className="header-right">
-          <button
-            className="btn btn-theme"
-            onClick={toggleTheme}
-            title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-          >
-            {isDark ? '☀️' : '🌙'}
-          </button>
-          <button
-            className="btn btn-secondary"
-            onClick={() => setShowUpload(!showUpload)}
-          >
-            {showUpload ? 'Hide Upload' : 'Upload Feedback'}
-          </button>
-          <Link to="/settings" className="btn btn-ghost">
-            Settings
-          </Link>
-          {user && user.role === 'admin' && (
-            <Link to="/admin" className="btn btn-warning">
-              Admin
+        {/* Header */}
+        <header className="dashboard-header">
+          <div className="header-left">
+            <h1>SentiView Dashboard</h1>
+            {user && <p className="user-info">Welcome, {user.username}!</p>}
+          </div>
+          <div className="header-right">
+            <button
+              className="btn btn-theme"
+              onClick={toggleTheme}
+              title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+              aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {isDark ? '☀️' : '🌙'}
+            </button>
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowUpload(!showUpload)}
+            >
+              {showUpload ? 'Hide Upload' : 'Upload Feedback'}
+            </button>
+            <Link to="/settings" className="btn btn-ghost">
+              Settings
             </Link>
-          )}
-          <button className="btn btn-danger" onClick={logout}>
-            Logout
-          </button>
+            {user && (
+              <button
+                className="btn btn-danger"
+                onClick={logout}
+                style={{ marginLeft: '8px' }}
+                aria-label="Logout"
+              >
+                Logout
+              </button>
+            )}
+          </div>
+        </header>
+
+        {/* Animated Banner with timestamp and username */}
+        <div className="dashboard-banner" role="region" aria-label="announcement banner">
+          <div className="banner-inner">
+            <div className="banner-marquee" aria-hidden="true">
+              <span className="banner-text">
+                {user && user.username ? user.username : ''}
+              </span>
+            </div>
+            <div className="banner-timestamp">
+              {currentTime.toLocaleString()}
+            </div>
+          </div>
         </div>
-      </header>
 
-      {/* Upload Section */}
-      {/* Render sections according to admin-configured layout */}
-      {layout.map((widget) => {
-        if (widget === 'SentimentCharts') {
-          return (
-            !loading && stats && (
-              <section key={widget} className="analytics-section">
-                <SentimentCharts stats={stats} feedback={feedback} />
-              </section>
-            )
-          );
-        }
+        {/* Error Message */}
+        {error && <div className="error-alert">{error}</div>}
 
-        if (widget === 'Filter') {
-          return (
-            <div key={widget} className="filter-section">
+        {/* Auth loading spinner */}
+        {authLoading ? (
+          <div className="loading">Loading user session...</div>
+        ) : !isAuthenticated ? (
+          <div className="not-authenticated">Please log in to view feedback.</div>
+        ) : (
+          <>
+            {/* Filter Section (only once) */}
+            <div className="filter-section">
               <h2>Feedback Analysis</h2>
               <div className="filter-buttons">
                 {['All', 'Positive', 'Negative', 'Neutral'].map((sentiment) => (
@@ -168,90 +179,42 @@ const Dashboard = () => {
                 ))}
               </div>
             </div>
-          );
-        }
 
-        if (widget === 'UploadFeedback') {
-          return (
-            <section key={widget} className="upload-section card-glass">
-              {showUpload ? <UploadFeedback onSuccess={handleUploadSuccess} /> : null}
-            </section>
-          );
-        }
-
-        if (widget === 'FeedbackList') {
-          return (
-            <div key={widget} className="feedback-list-wrapper">
-              {loading ? (
-                <div className="loading">Loading feedback...</div>
-              ) : (
-                <FeedbackList feedback={filteredFeedback} onDelete={handleDeleteFeedback} />
-              )}
+            {/* Main dashboard layout */}
+            <div className="dashboard-main">
+              {layout.map((widget) => {
+                if (widget === 'SentimentCharts') {
+                  return (
+                    !loading && stats && (
+                      <section key={widget} className="analytics-section">
+                        <SentimentCharts stats={stats} feedback={feedback} />
+                      </section>
+                    )
+                  );
+                }
+                if (widget === 'UploadFeedback') {
+                  return showUpload ? (
+                    <section key={widget} className="upload-section card-glass">
+                      <UploadFeedback onSuccess={handleUploadSuccess} />
+                    </section>
+                  ) : null;
+                }
+                if (widget === 'FeedbackList') {
+                  return (
+                    <div key={widget} className="feedback-list-wrapper">
+                      {filteredFeedback.length === 0 ? (
+                        <div className="no-feedback">No feedback found.</div>
+                      ) : (
+                        <FeedbackList feedback={filteredFeedback} onDelete={handleDeleteFeedback} />
+                      )}
+                    </div>
+                  );
+                }
+                return null;
+              })}
             </div>
-          );
-        }
-
-        return null;
-      })}
-
-      {/* Animated Banner with timestamp and username */}
-      <div className="dashboard-banner" role="region" aria-label="announcement banner">
-        <div className="banner-inner">
-          <div className="banner-marquee" aria-hidden="true">
-              <span className="banner-text">
-                {user && user.username ? user.username : ''}
-              </span>
-          </div>
-          <div className="banner-timestamp">
-            {currentTime.toLocaleString()}
-          </div>
-        </div>
-      </div>
-
-      {/* Error Message */}
-      {error && <div className="error-alert">{error}</div>}
-
-      <div className="dashboard-main">
-        <div className="left-col">
-          {/* Charts Section */}
-          {!loading && stats && (
-            <section className="analytics-section">
-              <SentimentCharts stats={stats} feedback={feedback} />
-            </section>
-          )}
-
-          {/* Filter Section */}
-          <div className="filter-section">
-            <h2>Feedback Analysis</h2>
-            <div className="filter-buttons">
-              {['All', 'Positive', 'Negative', 'Neutral'].map((sentiment) => (
-                <button
-                  key={sentiment}
-                  className={`filter-btn ${filter === sentiment ? 'active' : ''}`}
-                  onClick={() => handleFilterChange(sentiment)}
-                >
-                  {sentiment}
-                  {sentiment === 'All'
-                    ? ` (${feedback.length})`
-                    : ` (${feedback.filter((f) => f.sentiment.label === sentiment).length})`}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="right-col">
-          {/* Feedback List */}
-          {loading ? (
-            <div className="loading">Loading feedback...</div>
-          ) : (
-            <FeedbackList
-              feedback={filteredFeedback}
-              onDelete={handleDeleteFeedback}
-            />
-          )}
-        </div>
-      </div>
+          </>
+        )}
       </div>
     </div>
   );

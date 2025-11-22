@@ -35,6 +35,7 @@ const UserSettings = () => {
     }
   };
 
+
   return (
     <div className="page-container card-glass settings-page">
       <div className="settings-header">
@@ -60,8 +61,10 @@ const UserSettings = () => {
           <input id="company" name="company" value={form.company} onChange={handleChange} className="form-input" aria-label="company" />
         </div>
 
+
+
         <div className="form-actions">
-          <button className="btn btn-primary" type="submit" disabled={saving}>
+          <button className="btn btn-primary" type="submit" disabled={saving} style={{ background: '#2563eb', color: '#fff' }}>
             {saving ? 'Saving…' : 'Save Changes'}
           </button>
           <Link to="/dashboard" className="btn btn-ghost">Cancel</Link>

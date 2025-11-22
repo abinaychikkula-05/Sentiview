@@ -22,6 +22,14 @@ exports.register = async (req, res, next) => {
       });
     }
 
+    // Only allow @sentiview.com domain
+    if (!email.toLowerCase().endsWith('@sentiview.com')) {
+      return res.status(400).json({
+        success: false,
+        message: 'Only @sentiview.com email addresses are allowed for registration.',
+      });
+    }
+
     // Check if user already exists
     let user = await User.findOne({ $or: [{ email }, { username }] });
     if (user) {

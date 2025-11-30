@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }) => {
       delete axios.defaults.headers.common['Authorization'];
       localStorage.removeItem('token');
     }
-  }, [token]);
+  }, [token, user]);
 
   const register = async (username, email, password, company) => {
     setLoading(true);
@@ -108,13 +108,8 @@ export const AuthProvider = ({ children }) => {
         data: error,
       });
       
-      if (error.message) {
-        throw { message: error.message };
-      } else if (error.error) {
-        throw error.error;
-      } else {
-        throw { message: error.message || 'Registration failed' };
-      }
+      const err = new Error(error.message || 'Registration failed');
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -148,7 +143,7 @@ export const AuthProvider = ({ children }) => {
       console.log('✅ Login successful:', data);
       
       if (!response.ok) {
-        throw data || { message: 'Login failed' };
+        throw new Error(data?.message || 'Login failed');
       }
       
       setToken(data.token);
@@ -162,12 +157,12 @@ export const AuthProvider = ({ children }) => {
         data: error,
       });
       
-      if (error.message) {
-        throw { message: error.message };
-      } else if (error.error) {
-        throw error.error;
+      if (error instanceof Error) {
+        throw error;
+      } else if (error?.message) {
+        throw new Error(error.message);
       } else {
-        throw { message: error.message || 'Login failed' };
+        throw new Error('Login failed');
       }
     } finally {
       setLoading(false);
@@ -186,7 +181,8 @@ export const AuthProvider = ({ children }) => {
       setUser(response.data.user);
       return response.data;
     } catch (error) {
-      throw error.response?.data || error;
+      const err = new Error(error.response?.data?.message || 'Failed to update profile');
+      throw err;
     } finally {
       setLoading(false);
     }

@@ -14,12 +14,12 @@ import '../styles/Dashboard.css';
 import { feedbackService } from '../services/feedbackService';
 
 const Dashboard = () => {
-  const { user, logout, loading: authLoading, isAuthenticated } = useAuth();
+  const { user, logout, loading: authLoading, isAuthenticated, token } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const [feedback, setFeedback] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
   const [filter, setFilter] = useState('All');
   const [showUpload, setShowUpload] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -28,14 +28,14 @@ const Dashboard = () => {
 
   useEffect(() => {
     let didCancel = false;
-    if (user && user.token) {
+    if (isAuthenticated && token) {
       const fetchOnce = async () => {
         if (!didCancel) await loadFeedback();
       };
       fetchOnce();
     }
     return () => { didCancel = true; };
-  }, [user]);
+  }, [isAuthenticated, token]);
 
   // Live timestamp updater
   useEffect(() => {
@@ -75,23 +75,30 @@ const Dashboard = () => {
   // Handle feedback delete
   const handleDeleteFeedback = async (id) => {
     try {
-      await feedbackService.deleteFeedback(id, user.token);
+      await feedbackService.deleteFeedback(id);
       await loadFeedback();
     } catch (err) {
       setError('Failed to delete feedback');
+      setTimeout(() => setError(null), 3000);
     }
   };
 
   // Load feedback and stats
   async function loadFeedback() {
     setLoading(true);
-    setError('');
     try {
-      const res = await feedbackService.getAllFeedback(user.token);
+      const res = await feedbackService.getAllFeedback();
       setFeedback(res.data || []);
       setStats(res.stats || null);
+      setError(null);
     } catch (err) {
-      setError('Failed to load feedback');
+      // Only show error if it's a real server error, not 401/404
+      if (err.response?.status && ![401, 404].includes(err.response.status)) {
+        setError('Failed to load feedback');
+        console.error('Error loading feedback:', err);
+      } else {
+        setError(null);
+      }
     } finally {
       setLoading(false);
     }

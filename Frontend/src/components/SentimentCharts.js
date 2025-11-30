@@ -32,12 +32,10 @@ ChartJS.register(
 );
 
 const SentimentCharts = ({ stats, feedback }) => {
-  // Resolve colors from CSS variables so charts adapt to theme
-  const css = typeof window !== 'undefined' ? getComputedStyle(document.documentElement) : null;
-  const colorSuccess = (css && css.getPropertyValue('--success-color')) || '#4CAF50';
-  const colorDanger = (css && css.getPropertyValue('--danger-color')) || '#f44336';
-  const colorWarning = (css && css.getPropertyValue('--warning-color')) || '#FFC107';
-  const colorPrimary = (css && css.getPropertyValue('--primary-color')) || '#2c3e50';
+  // Define explicit colors for better visibility
+  const colorPositive = '#22C55E'; // Bright Green
+  const colorNegative = '#EF4444'; // Bright Red
+  const colorNeutral = '#FBBF24'; // Bright Yellow
 
   const hexToRgba = (hex, alpha = 0.12) => {
     try {
@@ -58,10 +56,9 @@ const SentimentCharts = ({ stats, feedback }) => {
     datasets: [
       {
         data: [stats.positive, stats.negative, stats.neutral],
-        // use semi-transparent fills for pie so colors are not too overpowering
-        backgroundColor: [hexToRgba(colorSuccess, 0.72), hexToRgba(colorDanger, 0.72), hexToRgba(colorWarning, 0.72)],
-        borderColor: [hexToRgba(colorSuccess, 0.95), hexToRgba(colorDanger, 0.95), hexToRgba(colorWarning, 0.95)],
-        borderWidth: 1,
+        backgroundColor: [colorPositive, colorNegative, colorNeutral],
+        borderColor: [colorPositive, colorNegative, colorNeutral],
+        borderWidth: 2,
       },
     ],
   };
@@ -73,8 +70,9 @@ const SentimentCharts = ({ stats, feedback }) => {
       {
         label: 'Count',
         data: [stats.positive, stats.negative, stats.neutral],
-        backgroundColor: [hexToRgba(colorSuccess, 0.12), hexToRgba(colorDanger, 0.12), hexToRgba(colorWarning, 0.12)],
-        borderColor: [hexToRgba(colorSuccess, 0.9), hexToRgba(colorDanger, 0.9), hexToRgba(colorWarning, 0.9)],
+        backgroundColor: [hexToRgba(colorPositive, 0.8), hexToRgba(colorNegative, 0.8), hexToRgba(colorNeutral, 0.8)],
+        borderColor: [colorPositive, colorNegative, colorNeutral],
+        borderWidth: 2,
         borderRadius: 5,
       },
     ],
@@ -98,8 +96,9 @@ const SentimentCharts = ({ stats, feedback }) => {
         data: Object.values(trendData)
           .slice(-7)
           .map((d) => d.positive),
-        borderColor: hexToRgba(colorSuccess, 0.95),
-        backgroundColor: hexToRgba(colorSuccess, 0.12),
+        borderColor: colorPositive,
+        backgroundColor: hexToRgba(colorPositive, 0.1),
+        borderWidth: 2,
         tension: 0.4,
       },
       {
@@ -107,8 +106,9 @@ const SentimentCharts = ({ stats, feedback }) => {
         data: Object.values(trendData)
           .slice(-7)
           .map((d) => d.negative),
-        borderColor: hexToRgba(colorDanger, 0.95),
-        backgroundColor: hexToRgba(colorDanger, 0.12),
+        borderColor: colorNegative,
+        backgroundColor: hexToRgba(colorNegative, 0.1),
+        borderWidth: 2,
         tension: 0.4,
       },
       {
@@ -116,8 +116,9 @@ const SentimentCharts = ({ stats, feedback }) => {
         data: Object.values(trendData)
           .slice(-7)
           .map((d) => d.neutral),
-        borderColor: hexToRgba(colorWarning, 0.95),
-        backgroundColor: hexToRgba(colorWarning, 0.12),
+        borderColor: colorNeutral,
+        backgroundColor: hexToRgba(colorNeutral, 0.1),
+        borderWidth: 2,
         tension: 0.4,
       },
     ],
@@ -171,7 +172,7 @@ const SentimentCharts = ({ stats, feedback }) => {
       <div className="charts-grid">
         {/* Pie Chart */}
         <div className="chart-container">
-          <h3>Sentiment Distribution</h3>
+          <h3 className="chart-title distribution">Sentiment Distribution</h3>
           <div className="chart">
             <Pie data={distributionData} options={chartOptions} />
           </div>
@@ -179,7 +180,7 @@ const SentimentCharts = ({ stats, feedback }) => {
 
         {/* Bar Chart */}
         <div className="chart-container">
-          <h3>Sentiment Breakdown</h3>
+          <h3 className="chart-title breakdown">Sentiment Breakdown</h3>
           <div className="chart">
             <Bar data={statsData} options={chartOptions} />
           </div>
@@ -188,7 +189,7 @@ const SentimentCharts = ({ stats, feedback }) => {
 
       {/* Trend Chart */}
       <div className="chart-container full-width">
-        <h3>Sentiment Trend (Last 7 Days)</h3>
+        <h3 className="chart-title trend">Sentiment Trend (Last 7 Days)</h3>
         <div className="chart">
           <Line data={trendChartData} options={chartOptions} />
         </div>

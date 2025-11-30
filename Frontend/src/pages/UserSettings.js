@@ -41,6 +41,11 @@ const UserSettings = () => {
       <div className="settings-header">
         <h1>User Settings</h1>
         <div>
+          {user && user.role === 'admin' && (
+            <Link to="/admin" className="btn btn-secondary" style={{ marginRight: '8px' }}>
+              Admin Panel
+            </Link>
+          )}
           <Link to="/dashboard" className="btn btn-ghost">Back</Link>
         </div>
       </div>

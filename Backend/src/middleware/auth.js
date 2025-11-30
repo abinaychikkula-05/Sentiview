@@ -30,8 +30,8 @@ exports.protect = async (req, res, next) => {
 /**
  * Generate JWT Token
  */
-exports.generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, {
+exports.generateToken = (userId, role = 'user') => {
+  return jwt.sign({ userId, role }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
   });
 };

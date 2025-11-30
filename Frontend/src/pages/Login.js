@@ -68,10 +68,16 @@ const Login = () => {
             </button>
           </form>
           <p className="auth-footer">
-            Don't have an account?{' '}
-            <a href="/register" className="link">
-              Sign up here
-            </a>
+            <Link to="/forgot-password" className="link" style={{ fontSize: '13px', color: '#2563eb', marginRight: '8px' }}>
+              Forgot Password?
+            </Link>
+            |
+            <span style={{ marginLeft: '8px' }}>
+              Don't have an account?{' '}
+              <a href="/register" className="link">
+                Sign up here
+              </a>
+            </span>
           </p>
         </div>
       </div>

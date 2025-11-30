@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SentiView - Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: white;
+        }
+        
+        .slide {
+            width: 100%;
+            height: 100vh;
+            page-break-after: always;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slide-content {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        /* Slide 1: Title Slide */
+        .slide-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .slide-1 h1 {
+            font-size: 72px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .slide-1 p {
+            font-size: 28px;
+            margin-bottom: 10px;
+            opacity: 0.95;
+        }
+        
+        .slide-1 .subtitle {
+            font-size: 18px;
+            margin-top: 50px;
+            opacity: 0.8;
+        }
+        
+        /* Slide 2: What is SentiView */
+        .slide-2 {
+            background: linear-gradient(to bottom, #f8f9fa 0%, white 100%);
+        }
+        
+        .slide h1 {
+            color: #667eea;
+            font-size: 56px;
+            margin-bottom: 40px;
+        }
+        
+        .slide h2 {
+            color: #764ba2;
+            font-size: 32px;
+            margin: 30px 0 20px 0;
+        }
+        
+        .slide p {
+            font-size: 20px;
+            line-height: 1.8;
+            margin: 15px 0;
+            color: #333;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .feature-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        
+        .feature-box strong {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        /* Colors for different sections */
+        .color-green { color: #22C55E; font-weight: bold; }
+        .color-red { color: #EF4444; font-weight: bold; }
+        .color-yellow { color: #FBBF24; font-weight: bold; }
+        
+        /* Timeline */
+        .timeline {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 40px;
+            gap: 20px;
+        }
+        
+        .timeline-item {
+            flex: 1;
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .timeline-item h3 {
+            font-size: 18px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-item p {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        /* Achievement boxes */
+        .achievement-box {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+            text-align: left;
+            font-size: 18px;
+        }
+        
+        .achievement-box:before {
+            content: "✓ ";
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        
+        /* Issue boxes */
+        .issue-box {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: left;
+            font-size: 16px;
+        }
+        
+        .fix-box {
+            background: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 15px;
+            margin: 5px 0 15px 0;
+            border-radius: 5px;
+            text-align: left;
+            font-size: 16px;
+        }
+        
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .stat {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+        }
+        
+        .stat .number {
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .stat .label {
+            font-size: 14px;
+        }
+        
+        /* Tech stack */
+        .tech-stack {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .tech-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: left;
+        }
+        
+        .tech-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        /* Tables */
+        .comparison-table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+        }
+        
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 16px;
+        }
+        
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            font-size: 16px;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        /* Footer */
+        .slide-footer {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        @media print {
+            .slide {
+                height: auto;
+                min-height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Title -->
+    <div class="slide slide-1">
+        <div class="slide-content">
+            <h1>SentiView</h1>
+            <p>Client Feedback Analysis & Sentiment Dashboard</p>
+            <p class="subtitle">Development Journey: Weeks 2-4</p>
+            <p class="subtitle">November 2025</p>
+        </div>
+        <div class="slide-footer">Page 1</div>
+    </div>
+
+    <!-- Slide 2: What is SentiView -->
+    <div class="slide slide-2">
+        <div class="slide-content">
+            <h1>What is SentiView?</h1>
+            <p>An intelligent dashboard that analyzes customer feedback and automatically detects sentiment</p>
+            
+            <div class="feature-grid">
+                <div class="feature-box">
+                    <strong>📊 Analyze Feedback</strong>
+                    Upload CSV or add manually
+                </div>
+                <div class="feature-box">
+                    <strong>🔍 Auto Detection</strong>
+                    Positive, Negative, Neutral
+                </div>
+                <div class="feature-box">
+                    <strong>📈 Visualize Data</strong>
+                    Beautiful charts & graphs
+                </div>
+                <div class="feature-box">
+                    <strong>👥 Manage Users</strong>
+                    Admin controls & access
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">Page 2</div>
+    </div>
+
+    <!-- Slide 3: Week 1 Status -->
+    <div class="slide slide-2">
+        <div class="slide-content">
+            <h1>Week 1</h1>
+            <h2 style="font-size: 36px; color: #f44336; margin-top: 50px;">❌ ABSENT</h2>
+            <p style="font-size: 24px; margin-top: 40px; color: #999;">No work completed in Week 1</p>
+        </div>
+        <div class="slide-footer">Page 3</div>
+    </div>
+
+    <!-- Slide 4: Week 2 -->
+    <div class="slide slide-2">
+        <div class="slide-content">
+            <h1>Week 2: Colors & Roles</h1>
+            <p style="margin-top: 30px;">✅ Implemented Professor's Requirements:</p>
+            
+            <div style="text-align: left; margin-top: 30px;">
+                <div class="achievement-box">
+                    Change chart colors: <span class="color-green">Positive Green</span>, 
+                    <span class="color-red">Negative Red</span>, <span class="color-yellow">Neutral Yellow</span>
+                </div>
+                
+                <div class="achievement-box">
+                    Create User & Admin roles with different permissions
+                </div>
+                
+                <div class="achievement-box">
+                    Update login page with better styling
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; text-align: left;">
+                <h3 style="color: #f44336; margin-bottom: 10px;">Issues Found & Fixed:</h3>
+                <div class="issue-box">❌ Charts not showing correct colors</div>
+                <div class="fix-box">✓ Updated component state & rendering logic</div>
+            </div>
+        </div>
+        <div class="slide-footer">Page 4</div>
+    </div>
+
+    <!-- Slide 5: Week 3 -->
+    <div class="slide slide-2">
+        <div class="slide-content">
+            <h1>Week 3: Live Clock & Banner</h1>
+            <p style="margin-top: 30px;">✅ Implemented Professor's Requirements:</p>
+            
+            <div style="text-align: left; margin-top: 30px;">
+                <div class="achievement-box">
+                    Live timestamp that updates every second
+                </div>
+                
+                <div class="achievement-box">
+                    Animated username banner with marquee effect
+                </div>
+                
+                <div class="achievement-box">
+                    Matched banner styling with dashboard background
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; text-align: left;">
+                <h3 style="color: #f44336; margin-bottom: 10px;">Issues Found & Fixed:</h3>
+                <div class="issue-box">❌ Text was invisible (white on white in dark mode)</div>
+                <div class="fix-box">✓ Changed to black text, solid background matching theme</div>
+                <div class="issue-box">❌ Animation too fast, text not readable</div>
+                <div class="fix-box">✓ Adjusted timing for smooth marquee effect</div>
+            </div>
+        </div>
+        <div class="slide-footer">Page 5</div>
+    </div>
+
+    <!-- Slide 6: Week 4 - Landing Page -->
+    <div class="slide slide-2">
+        <div class="slide-content">
+            <h1>Week 4: Landing Page & Security</h1>
+            <p style="margin-top: 30px;">✅ Major Features Completed:</p>
+            
+            <div style="text-align: left; margin-top: 30px;">
+                <div class="achievement-box">
+                    Professional landing page for new users
+                </div>
+                
+                <div class="achievement-box">
+                    Forgot Password feature with 2-step verification
+                </div>
+                
+                <div class="achievement-box">
+                    Secure password reset functionality
+                </div>
+                
+                <div class="achievement-box">
+                    Fixed feedback loading errors
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">Page 6</div>
+    </div>
+
+    <!-- Slide 7: Week 4 - Admin Dashboard -->
+    <div class="slide slide-2">
+        <div class="slide-content">
+            <h1>Week 4: Admin Dashboard</h1>
+            <p style="margin-top: 30px;">✅ Complete Admin Panel Built:</p>
+            
+            <div class="feature-grid" style="grid-template-columns: 1fr;">
+                <div class="feature-box">
+                    <strong>📊 System Statistics</strong>
+                    Total users, feedback count, sentiment breakdown
+                </div>
+                <div class="feature-box">
+                    <strong>👥 User Management</strong>
+                    View, edit, and delete users
+                </div>
+                <div class="feature-box">
+                    <strong>📈 Analytics</strong>
+                    Top 10 contributors, activity logs, trends
+                </div>
+                <div class="feature-box">
+                    <strong>⚙️ Customization</strong>
+                    Dashboard layout configuration
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">Page 7</div>
+    </div>
+
+    <!-- Slide 8: Admin Issues -->
+    <div class="slide slide-2">
+        <div class="slide-content">
+            <h1>Week 4: Admin - Issues & Fixes</h1>
+            
+            <div style="text-align: left; margin-top: 20px;">
+                <h3 style="color: #f44336; margin-bottom: 15px; font-size: 18px;">🔴 Issue 1: Admin Role Not Working</h3>
+                <div class="issue-box">Admin user had role='user' instead of role='admin' in database</div>
+                <div class="fix-box">✓ Updated database record to set proper admin role</div>
+                
+                <h3 style="color: #f44336; margin-top: 20px; margin-bottom: 15px; font-size: 18px;">🔴 Issue 2: JWT Token Problem</h3>
+                <div class="issue-box">JWT token didn't include role information</div>
+                <div class="fix-box">✓ Modified token generation to include role in payload</div>
+                
+                <h3 style="color: #f44336; margin-top: 20px; margin-bottom: 15px; font-size: 18px;">🔴 Issue 3: API Not Responding</h3>
+                <div class="issue-box">Frontend getting token from localStorage instead of context</div>
+                <div class="fix-box">✓ Updated to use useAuth() hook for token access</div>
+            </div>
+        </div>
+        <div class="slide-footer">Page 8</div>
+    </div>
+
+    <!-- Slide 9: Feedback Error Fix -->
+    <div class="slide slide-2">
+        <div class="slide-content">
+            <h1>Week 4: Other Key Fixes</h1>
+            
+            <div style="text-align: left; margin-top: 20px;">
+                <h3 style="color: #f44336; margin-bottom: 15px; font-size: 18px;">🔴 "Failed to Load Feedback" Error</h3>
+                <div class="issue-box">Error message showing on first dashboard load</div>
+                <div class="fix-box">✓ Changed error state from empty string to null</div>
+                <div class="fix-box">✓ Only display real errors, hide normal empty states</div>
+                
+                <h3 style="color: #f44336; margin-top: 20px; margin-bottom: 15px; font-size: 18px;">🔴 Dashboard Data Not Loading</h3>
+                <div class="issue-box">Feedback wasn't displaying after login</div>
+                <div class="fix-box">✓ Fixed component to check isAuthenticated && token from context</div>
+                
+                <h3 style="color: #f44336; margin-top: 20px; margin-bottom: 15px; font-size: 18px;">🔴 Password Pre-save Hook Issue</h3>
+                <div class="issue-box">Login failed after admin role update</div>
+                <div class="fix-box">✓ Fixed middleware with proper return statement</div>
+            </div>
+        </div>
+        <div class="slide-footer">Page 9</div>
+    </div>
+
+    <!-- Slide 10: Technology Stack -->
+    <div class="slide slide-2">
+        <div class="slide-content">
+            <h1>Technology Stack</h1>
+            
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <strong>Frontend</strong>
+                    React 18.2<br>
+                    Chart.js<br>
+                    Axios<br>
+                    React Router
+                </div>
+                <div class="tech-item">
+                    <strong>Backend</strong>
+                    Node.js<br>
+                    Express<br>
+                    MongoDB<br>
+                    JWT Auth
+                </div>
+            </div>
+            
+            <div class="stats" style="margin-top: 30px;">
+                <div class="stat">
+                    <div class="number">10+</div>
+                    <div class="label">API Endpoints</div>
+                </div>
+                <div class="stat">
+                    <div class="number">15+</div>
+                    <div class="label">Components</div>
+                </div>
+                <div class="stat">
+                    <div class="number">2</div>
+                    <div class="label">User Roles</div>
+                </div>
+                <div class="stat">
+                    <div class="number">3</div>
+                    <div class="label">Sentiments</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">Page 10</div>
+    </div>
+
+    <!-- Slide 11: Features Summary -->
+    <div class="slide slide-2">
+        <div class="slide-content">
+            <h1>Complete Features</h1>
+            
+            <div class="feature-grid" style="grid-template-columns: 1fr;">
+                <div class="feature-box">
+                    <strong>User Features</strong>
+                    Login • Upload feedback • View charts • Dark mode • Password reset
+                </div>
+                <div class="feature-box">
+                    <strong>Admin Features</strong>
+                    Statistics • Manage users • Delete feedback • View analytics • Customize layout
+                </div>
+                <div class="feature-box">
+                    <strong>Core Features</strong>
+                    Sentiment analysis • CSV upload • Real-time updates • Role-based access • Security
+                </div>
+            </div>
+            
+            <div class="stats" style="margin-top: 30px;">
+                <div class="stat">
+                    <div class="number">4</div>
+                    <div class="label">Users</div>
+                </div>
+                <div class="stat">
+                    <div class="number">31</div>
+                    <div class="label">Feedback Items</div>
+                </div>
+                <div class="stat">
+                    <div class="number">1</div>
+                    <div class="label">Admin</div>
+                </div>
+                <div class="stat">
+                    <div class="number">100%</div>
+                    <div class="label">Functional</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">Page 11</div>
+    </div>
+
+    <!-- Slide 12: Test Credentials -->
+    <div class="slide slide-2">
+        <div class="slide-content">
+            <h1>How to Access SentiView</h1>
+            <p style="margin-top: 30px; font-size: 18px;">Test Credentials:</p>
+            
+            <table class="comparison-table">
+                <tr>
+                    <th>Type</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>Access</th>
+                </tr>
+                <tr>
+                    <td><strong>Admin</strong></td>
+                    <td>admin@sentiview.com</td>
+                    <td>admin123456</td>
+                    <td>Admin Panel ✓</td>
+                </tr>
+                <tr>
+                    <td><strong>User</strong></td>
+                    <td>demo@sentiview.com</td>
+                    <td>demo123456</td>
+                    <td>Dashboard Only</td>
+                </tr>
+            </table>
+            
+            <p style="margin-top: 30px; font-size: 18px;">
+                🌐 <strong>Frontend:</strong> http://localhost:3000<br>
+                🔌 <strong>Backend API:</strong> http://localhost:5000
+            </p>
+        </div>
+        <div class="slide-footer">Page 12</div>
+    </div>
+
+    <!-- Slide 13: Lessons Learned -->
+    <div class="slide slide-2">
+        <div class="slide-content">
+            <h1>Lessons Learned</h1>
+            
+            <div style="text-align: left; margin-top: 30px; font-size: 18px;">
+                <div class="achievement-box" style="background: #fff3cd; border-left-color: #ffc107;">
+                    <strong>🎓 Database Schema Design</strong><br>
+                    Proper field definition prevents future issues
+                </div>
+                
+                <div class="achievement-box" style="background: #fff3cd; border-left-color: #ffc107;">
+                    <strong>🎓 Authentication Security</strong><br>
+                    Role information must be in JWT token for authorization checks
+                </div>
+                
+                <div class="achievement-box" style="background: #fff3cd; border-left-color: #ffc107;">
+                    <strong>🎓 Error Handling</strong><br>
+                    Distinguish between real errors and normal empty states
+                </div>
+                
+                <div class="achievement-box" style="background: #fff3cd; border-left-color: #ffc107;">
+                    <strong>🎓 API Testing</strong><br>
+                    Test endpoints with curl before debugging frontend
+                </div>
+                
+                <div class="achievement-box" style="background: #fff3cd; border-left-color: #ffc107;">
+                    <strong>🎓 Browser Cache</strong><br>
+                    Hard refresh needed when backend changes token structure
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">Page 13</div>
+    </div>
+
+    <!-- Slide 14: Final Summary -->
+    <div class="slide slide-1">
+        <div class="slide-content">
+            <h1 style="font-size: 64px;">Project Complete!</h1>
+            
+            <div style="margin-top: 50px;">
+                <p style="font-size: 24px; margin: 20px 0;">✅ Weeks 2-4: Full Development Cycle</p>
+                <p style="font-size: 24px; margin: 20px 0;">✅ Color Scheme Implemented</p>
+                <p style="font-size: 24px; margin: 20px 0;">✅ Live Dashboard with Charts</p>
+                <p style="font-size: 24px; margin: 20px 0;">✅ Admin Panel Built & Tested</p>
+                <p style="font-size: 24px; margin: 20px 0;">✅ All Bugs Fixed & Resolved</p>
+            </div>
+            
+            <p style="margin-top: 60px; font-size: 18px; opacity: 0.9;">Thank you! 🚀</p>
+        </div>
+        <div class="slide-footer">Page 14 - End</div>
+    </div>
+
+</body>
+</html>

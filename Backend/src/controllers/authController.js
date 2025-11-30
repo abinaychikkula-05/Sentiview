@@ -47,7 +47,7 @@ exports.register = async (req, res, next) => {
       company,
     });
 
-    const token = generateToken(user._id);
+    const token = generateToken(user._id, user.role);
 
     res.status(201).json({
       success: true,
@@ -99,7 +99,7 @@ exports.login = async (req, res, next) => {
       });
     }
 
-    const token = generateToken(user._id);
+    const token = generateToken(user._id, user.role);
 
     res.status(200).json({
       success: true,
@@ -133,6 +133,65 @@ exports.getMe = async (req, res, next) => {
         company: user.company,
         role: user.role || 'user',
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Reset password with verification
+ * POST /api/auth/reset-password
+ * Requires: username, email, oldPassword, newPassword
+ */
+exports.resetPassword = async (req, res, next) => {
+  try {
+    const { username, email, oldPassword, newPassword } = req.body;
+
+    // Validation
+    if (!username || !email || !oldPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide all required fields',
+      });
+    }
+
+    // Validate new password length
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: 'New password must be at least 6 characters',
+      });
+    }
+
+    // Find user by username and email
+    const user = await User.findOne({
+      $and: [{ username }, { email }],
+    }).select('+password');
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid username or email',
+      });
+    }
+
+    // Verify old password
+    const isMatch = await user.matchPassword(oldPassword);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: 'Old password is incorrect',
+      });
+    }
+
+    // Update password
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Password reset successfully',
     });
   } catch (error) {
     next(error);

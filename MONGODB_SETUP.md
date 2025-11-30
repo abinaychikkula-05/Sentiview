@@ -5,9 +5,11 @@ The backend cannot connect to MongoDB because `MONGODB_URI` is not configured.
 
 ## Solution Options
 
-### ✅ Option 1: MongoDB Atlas (Recommended - Cloud)
+### ✅ Option 1: MongoDB Atlas (Recommended - Cloud) - FOR PRODUCTION/RAILWAY
 
 MongoDB Atlas is a free cloud database service. Follow these steps:
+
+#### For Local Development:
 
 1. **Create MongoDB Atlas Account**
    - Go to https://www.mongodb.com/cloud/atlas
@@ -16,7 +18,7 @@ MongoDB Atlas is a free cloud database service. Follow these steps:
 
 2. **Create a Database Cluster**
    - Click "Create" to build a new cluster
-   - Select "FREE" tier
+   - Select "FREE" tier (M0 Sandbox)
    - Choose a region close to you
    - Click "Create Cluster"
    - Wait 5-10 minutes for cluster to be created
@@ -25,26 +27,44 @@ MongoDB Atlas is a free cloud database service. Follow these steps:
    - Go to "Database Access" in left menu
    - Click "Add New Database User"
    - Username: `sentiview_user`
-   - Password: `YourStrongPassword123!`
+   - Password: Generate strong password (copy it!)
    - Click "Add User"
 
 4. **Allow Network Access**
    - Go to "Network Access" in left menu
    - Click "Add IP Address"
-   - Select "Allow Access from Anywhere" (for development)
+   - Select "Allow Access from Anywhere" (IMPORTANT for Railway)
    - Click "Confirm"
 
 5. **Get Connection String**
    - Go to "Databases" and click "Connect"
    - Choose "Connect your application"
    - Copy the MongoDB URI string
-   - Replace `<username>` and `<password>` with your database user credentials
+   - Replace `<username>` with `sentiview_user`
+   - Replace `<password>` with your generated password
    - Replace `myFirstDatabase` with `sentiview`
+   - Final format:
+   ```
+   mongodb+srv://sentiview_user:YOUR_PASSWORD@cluster0.mongodb.net/sentiview?retryWrites=true&w=majority
+   ```
 
-6. **Update .env File**
+6. **Update .env File (Local)**
    ```
-   MONGODB_URI=mongodb+srv://sentiview_user:YourStrongPassword123!@cluster0.mongodb.net/sentiview?retryWrites=true&w=majority
+   MONGODB_URI=mongodb+srv://sentiview_user:YOUR_PASSWORD@cluster0.mongodb.net/sentiview?retryWrites=true&w=majority
    ```
+
+#### For Railway Production:
+
+1. Follow steps 1-5 above
+2. Go to **Railway Dashboard**
+3. Select your **SentiView Backend** project
+4. Go to **Variables** tab
+5. Add new variable:
+   - Name: `MONGODB_URI`
+   - Value: `mongodb+srv://sentiview_user:YOUR_PASSWORD@cluster0.mongodb.net/sentiview?retryWrites=true&w=majority`
+6. Save
+7. Railway will auto-redeploy
+8. Check logs for: `✅ MongoDB Connected`
 
 ### ✅ Option 2: MongoDB Community Edition (Local)
 

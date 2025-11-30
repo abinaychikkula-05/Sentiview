@@ -26,7 +26,14 @@ console.log('📍 CORS allowed origins:', allowedOrigins);
 
 app.use((req, res, next) => {
   const origin = req.get('origin');
-  const isAllowedOrigin = !origin || allowedOrigins.includes(origin);
+  
+  // Allow all Vercel deployments and localhost
+  const isAllowedOrigin = !origin || 
+    allowedOrigins.includes(origin) || 
+    origin.endsWith('.vercel.app') ||
+    origin.includes('localhost');
+
+  console.log(`🔍 CORS Check: Origin=${origin}, Allowed=${isAllowedOrigin}`);
 
   if (origin && isAllowedOrigin) {
     res.header('Access-Control-Allow-Origin', origin);
@@ -35,16 +42,24 @@ app.use((req, res, next) => {
   res.header('Vary', 'Origin');
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-  res.header('Access-Control-Max-Age', '600');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With');
+  res.header('Access-Control-Max-Age', '86400'); // 24 hours
+
+  if (req.method === 'OPTIONS') {
+    // Always respond 204 to OPTIONS if origin is allowed
+    if (isAllowedOrigin) {
+      return res.sendStatus(204);
+    }
+    // If not allowed, we still might want to return 204 but without the Allow-Origin header
+    // to prevent browser errors, but standard is 403. 
+    // Let's stick to 204 but without the header if we want to be silent, 
+    // or 403 if we want to be strict. 
+    // Given the user's issue, let's be strict on 403 only if we are SURE it's bad.
+  }
 
   if (!isAllowedOrigin) {
     console.warn('🚫 CORS blocked origin:', origin);
     return res.status(403).json({ success: false, message: 'Origin not allowed' });
-  }
-
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(204);
   }
 
   next();

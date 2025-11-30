@@ -92,12 +92,13 @@ const Dashboard = () => {
       setStats(res.stats || null);
       setError(null);
     } catch (err) {
-      // Only show error if it's a real server error, not 401/404
-      if (err.response?.status && ![401, 404].includes(err.response.status)) {
-        setError('Failed to load feedback');
-        console.error('Error loading feedback:', err);
-      } else {
+      console.error('Error loading feedback:', err);
+      // Show error for all cases except 401 (handled by auth redirect)
+      if (err.response?.status === 401) {
         setError(null);
+      } else {
+        const errorMessage = err.response?.data?.message || err.message || 'Failed to load feedback';
+        setError(errorMessage);
       }
     } finally {
       setLoading(false);

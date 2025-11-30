@@ -140,6 +140,69 @@ exports.getMe = async (req, res, next) => {
 };
 
 /**
+ * Setup endpoint - Promotes first admin user
+ * POST /api/auth/setup
+ * Requires: email, setupSecret
+ * Note: Can only be used if no admin exists yet
+ */
+exports.setup = async (req, res, next) => {
+  try {
+    const { email, setupSecret } = req.body;
+
+    // Validate inputs
+    if (!email || !setupSecret) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email and setup secret required',
+      });
+    }
+
+    // Validate setup secret matches environment variable
+    const expectedSecret = process.env.SETUP_SECRET || 'dev-setup-secret';
+    if (setupSecret !== expectedSecret) {
+      return res.status(403).json({
+        success: false,
+        message: 'Invalid setup secret',
+      });
+    }
+
+    // Check if any admin exists
+    const adminExists = await User.findOne({ role: 'admin' });
+    if (adminExists) {
+      return res.status(400).json({
+        success: false,
+        message: 'Admin user already exists. Setup can only be run once.',
+      });
+    }
+
+    // Find and promote user to admin
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    user.role = 'admin';
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'User promoted to admin successfully',
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Reset password with verification
  * POST /api/auth/reset-password
  * Requires: username, email, oldPassword, newPassword

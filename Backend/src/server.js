@@ -6,8 +6,6 @@
 
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
-const path = require('path');
 const connectDB = require('./config/database');
 const { errorHandler } = require('./middleware/errorHandler');
 
@@ -26,19 +24,31 @@ const allowedOrigins = [
 
 console.log('📍 CORS allowed origins:', allowedOrigins);
 
-const corsOptions = {
-  origin: allowedOrigins,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  maxAge: 86400,
-};
+app.use((req, res, next) => {
+  const origin = req.get('origin');
+  const isAllowedOrigin = !origin || allowedOrigins.includes(origin);
 
-// Apply CORS FIRST
-app.use(cors(corsOptions));
+  if (origin && isAllowedOrigin) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
 
-// Handle preflight requests
-app.options('*', cors(corsOptions));
+  res.header('Vary', 'Origin');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.header('Access-Control-Max-Age', '600');
+
+  if (!isAllowedOrigin) {
+    console.warn('🚫 CORS blocked origin:', origin);
+    return res.status(403).json({ success: false, message: 'Origin not allowed' });
+  }
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
 
 // Middleware
 app.use(express.json());

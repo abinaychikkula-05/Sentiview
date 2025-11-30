@@ -5,7 +5,18 @@
 
 import axios from 'axios';
 
-const API_BASE = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/feedback`;
+// Determine API URL based on environment
+const getAPIUrl = () => {
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+  if (window.location.hostname === 'sentiview-ten.vercel.app') {
+    return 'https://airy-tranquility-production-da57.up.railway.app';
+  }
+  return 'http://localhost:5000';
+};
+
+const API_BASE = `${getAPIUrl()}/api/feedback`;
 
 export const feedbackService = {
   // Upload CSV file

@@ -6,7 +6,23 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+// Determine API URL based on environment
+const getAPIUrl = () => {
+  // First check if explicitly set in environment
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+  
+  // In production (Vercel), use the Railway backend
+  if (window.location.hostname === 'sentiview-ten.vercel.app') {
+    return 'https://airy-tranquility-production-da57.up.railway.app';
+  }
+  
+  // Fallback for local development
+  return 'http://localhost:5000';
+};
+
+const API_URL = getAPIUrl();
 
 const AuthContext = createContext();
 

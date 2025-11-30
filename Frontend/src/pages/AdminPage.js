@@ -8,7 +8,18 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Components.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+// Determine API URL based on environment
+const getAPIUrl = () => {
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+  if (window.location.hostname === 'sentiview-ten.vercel.app') {
+    return 'https://airy-tranquility-production-da57.up.railway.app';
+  }
+  return 'http://localhost:5000';
+};
+
+const API_URL = getAPIUrl();
 
 const AdminPage = () => {
   const { user, token } = useAuth();

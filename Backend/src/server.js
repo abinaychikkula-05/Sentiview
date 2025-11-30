@@ -15,11 +15,7 @@ connectDB();
 
 const app = express();
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// CORS configuration - must be BEFORE routes
+// CORS configuration - MUST be FIRST before any other middleware
 const allowedOrigins = [
   'https://sentiview-ten.vercel.app',
   'http://localhost:3000',
@@ -29,23 +25,23 @@ const allowedOrigins = [
 
 console.log('📍 CORS allowed origins:', allowedOrigins);
 
-// Simple CORS middleware - respond to OPTIONS requests
-app.options('*', cors({
+const corsOptions = {
   origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   maxAge: 86400,
-}));
+};
 
-// Apply CORS to all routes
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  maxAge: 86400,
-}));
+// Apply CORS FIRST
+app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options('*', cors(corsOptions));
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Security headers
 app.use((req, res, next) => {

@@ -73,34 +73,47 @@ export const AuthProvider = ({ children }) => {
       
       const registerUrl = `${apiUrl}/api/auth/register`;
       console.log('📍 Full URL:', registerUrl);
-      console.log('📤 Sending POST request...');
+      console.log('📤 Sending POST request using fetch...');
       
-      const response = await axios.post(registerUrl, {
-        username,
-        email,
-        password,
-        company,
+      const response = await fetch(registerUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+          company,
+        }),
       });
-      console.log('✅ Registration successful:', response.data);
       
-      setToken(response.data.token);
-      setUser(response.data.user);
-      return response.data;
+      console.log('📥 Response status:', response.status);
+      const data = await response.json();
+      console.log('✅ Registration successful:', data);
+      
+      if (!response.ok) {
+        throw data || { message: 'Registration failed' };
+      }
+      
+      setToken(data.token);
+      setUser(data.user);
+      return data;
     } catch (error) {
       console.error('❌ Register error:', error);
+      console.error('Error type:', error.constructor.name);
       console.error('Error details:', {
-        message: error.message,
-        code: error.code,
-        response: error.response?.data,
-        status: error.response?.status,
+        message: error.message || error?.message,
+        data: error,
       });
       
-      if (error.response?.data) {
-        throw error.response.data;
-      } else if (error.message) {
-        throw { message: error.message, error };
+      if (error.message) {
+        throw { message: error.message };
+      } else if (error.error) {
+        throw error.error;
       } else {
-        throw { message: 'Network error or server unreachable', error };
+        throw { message: error.message || 'Registration failed' };
       }
     } finally {
       setLoading(false);
@@ -116,40 +129,45 @@ export const AuthProvider = ({ children }) => {
       
       const loginUrl = `${apiUrl}/api/auth/login`;
       console.log('📍 Full URL:', loginUrl);
-      console.log('📤 Sending POST request...');
+      console.log('📤 Sending POST request using fetch...');
       
-      // Add timeout to axios request
-      const response = await axios.post(loginUrl, {
-        email,
-        password,
-      }, {
-        timeout: 10000, // 10 second timeout
+      const response = await fetch(loginUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       });
       
-      console.log('✅ Login successful:', response.data);
+      console.log('📥 Response status:', response.status);
+      const data = await response.json();
+      console.log('✅ Login successful:', data);
       
-      setToken(response.data.token);
-      setUser(response.data.user);
-      return response.data;
+      if (!response.ok) {
+        throw data || { message: 'Login failed' };
+      }
+      
+      setToken(data.token);
+      setUser(data.user);
+      return data;
     } catch (error) {
       console.error('❌ Login error:', error);
       console.error('Error type:', error.constructor.name);
       console.error('Error details:', {
-        message: error.message,
-        code: error.code,
-        isAxiosError: error.isAxiosError,
-        response: error.response?.data,
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        headers: error.response?.headers,
+        message: error.message || error?.message,
+        data: error,
       });
       
-      if (error.response?.data) {
-        throw error.response.data;
-      } else if (error.message) {
-        throw { message: error.message, error };
+      if (error.message) {
+        throw { message: error.message };
+      } else if (error.error) {
+        throw error.error;
       } else {
-        throw { message: 'Network error or server unreachable', error };
+        throw { message: error.message || 'Login failed' };
       }
     } finally {
       setLoading(false);

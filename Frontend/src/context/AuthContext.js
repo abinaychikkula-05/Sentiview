@@ -62,18 +62,32 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const apiUrl = getAPIUrl();
-      console.log('Registering with URL:', apiUrl);
-      const response = await axios.post(`${apiUrl}/api/auth/register`, {
+      console.log('🔄 Registering with URL:', apiUrl);
+      
+      const registerUrl = `${apiUrl}/api/auth/register`;
+      console.log('📍 Full URL:', registerUrl);
+      console.log('📤 Sending POST request...');
+      
+      const response = await axios.post(registerUrl, {
         username,
         email,
         password,
         company,
       });
+      console.log('✅ Registration successful:', response.data);
+      
       setToken(response.data.token);
       setUser(response.data.user);
       return response.data;
     } catch (error) {
-      console.error('Register error:', error);
+      console.error('❌ Register error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        code: error.code,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
+      
       if (error.response?.data) {
         throw error.response.data;
       } else if (error.message) {
@@ -90,16 +104,31 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const apiUrl = getAPIUrl();
-      console.log('Logging in with URL:', apiUrl);
-      const response = await axios.post(`${apiUrl}/api/auth/login`, {
+      console.log('🔄 Logging in with URL:', apiUrl);
+      console.log('📧 Email:', email);
+      
+      const loginUrl = `${apiUrl}/api/auth/login`;
+      console.log('📍 Full URL:', loginUrl);
+      
+      console.log('📤 Sending POST request...');
+      const response = await axios.post(loginUrl, {
         email,
         password,
       });
+      console.log('✅ Login successful:', response.data);
+      
       setToken(response.data.token);
       setUser(response.data.user);
       return response.data;
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('❌ Login error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        code: error.code,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
+      
       if (error.response?.data) {
         throw error.response.data;
       } else if (error.message) {

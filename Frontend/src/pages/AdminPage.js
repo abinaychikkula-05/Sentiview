@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Components.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const AdminPage = () => {
   const { user, token } = useAuth();
   const [users, setUsers] = useState([]);
@@ -40,7 +42,7 @@ const AdminPage = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/admin/users', {
+      const res = await fetch(`${API_URL}/api/admin/users`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -57,14 +59,14 @@ const AdminPage = () => {
 
   const fetchStats = async () => {
     try {
-      const res = await fetch('/api/admin/stats', {
+      const res = await fetch(`${API_URL}/api/admin/stats`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
       if (!res.ok) throw new Error('Failed to fetch stats');
       const data = await res.json();
-      setStats(data.stats);
+      setStats(data);
     } catch (err) {
       console.error('Error fetching stats:', err);
     }
@@ -72,7 +74,7 @@ const AdminPage = () => {
 
   const deleteUser = async (userId, username) => {
     try {
-      const res = await fetch(`/api/admin/users/${userId}`, {
+      const res = await fetch(`${API_URL}/api/admin/users/${userId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -117,7 +119,7 @@ const AdminPage = () => {
 
   const saveLayout = async () => {
     try {
-      const res = await fetch('/api/admin/settings/layout', {
+      const res = await fetch(`${API_URL}/api/admin/settings/layout`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

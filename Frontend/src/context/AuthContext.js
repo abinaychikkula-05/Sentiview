@@ -6,6 +6,8 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -21,7 +23,7 @@ export const AuthProvider = ({ children }) => {
       // Restore user session if token exists but user is missing
       if (!user) {
         setLoading(true);
-        axios.get('/api/auth/me')
+        axios.get(`${API_URL}/api/auth/me`)
           .then((response) => {
             setUser(response.data.user);
           })
@@ -40,7 +42,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (username, email, password, company) => {
     setLoading(true);
     try {
-      const response = await axios.post('/api/auth/register', {
+      const response = await axios.post(`${API_URL}/api/auth/register`, {
         username,
         email,
         password,
@@ -59,7 +61,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const response = await axios.post('/api/auth/login', {
+      const response = await axios.post(`${API_URL}/api/auth/login`, {
         email,
         password,
       });
@@ -81,7 +83,7 @@ export const AuthProvider = ({ children }) => {
   const updateProfile = async (updates) => {
     setLoading(true);
     try {
-      const response = await axios.put('/api/users/me', updates);
+      const response = await axios.put(`${API_URL}/api/users/me`, updates);
       setUser(response.data.user);
       return response.data;
     } catch (error) {

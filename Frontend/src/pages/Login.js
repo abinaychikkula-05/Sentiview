@@ -1,6 +1,7 @@
 /**
  * Login Component
  * User authentication form
+ * CORS preflight fix applied
  */
 
 import React, { useState } from 'react';

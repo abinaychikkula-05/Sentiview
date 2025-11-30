@@ -1,0 +1,11 @@
+{
+  "builder": "nixpacks",
+  "nixpacks": {
+    "apt": ["build-essential"],
+    "buildPkgs": ["python3"],
+    "cmds": [
+      "npm ci --production=false",
+      "npm run build || true"
+    ]
+  }
+}

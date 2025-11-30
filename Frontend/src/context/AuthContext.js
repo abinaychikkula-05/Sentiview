@@ -13,16 +13,14 @@ const getAPIUrl = () => {
     return process.env.REACT_APP_API_URL;
   }
   
-  // In production (Vercel), use the Railway backend
-  if (window.location.hostname === 'sentiview-ten.vercel.app') {
+  // Check if window is available (browser environment)
+  if (typeof window !== 'undefined' && window.location.hostname === 'sentiview-ten.vercel.app') {
     return 'https://airy-tranquility-production-da57.up.railway.app';
   }
   
   // Fallback for local development
   return 'http://localhost:5000';
 };
-
-const API_URL = getAPIUrl();
 
 const AuthContext = createContext();
 
@@ -39,7 +37,7 @@ export const AuthProvider = ({ children }) => {
       // Restore user session if token exists but user is missing
       if (!user) {
         setLoading(true);
-        axios.get(`${API_URL}/api/auth/me`)
+        axios.get(`${getAPIUrl()}/api/auth/me`)
           .then((response) => {
             setUser(response.data.user);
           })
@@ -58,7 +56,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (username, email, password, company) => {
     setLoading(true);
     try {
-      const response = await axios.post(`${API_URL}/api/auth/register`, {
+      const response = await axios.post(`${getAPIUrl()}/api/auth/register`, {
         username,
         email,
         password,
@@ -77,7 +75,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const response = await axios.post(`${API_URL}/api/auth/login`, {
+      const response = await axios.post(`${getAPIUrl()}/api/auth/login`, {
         email,
         password,
       });
@@ -99,7 +97,7 @@ export const AuthProvider = ({ children }) => {
   const updateProfile = async (updates) => {
     setLoading(true);
     try {
-      const response = await axios.put(`${API_URL}/api/users/me`, updates);
+      const response = await axios.put(`${getAPIUrl()}/api/users/me`, updates);
       setUser(response.data.user);
       return response.data;
     } catch (error) {

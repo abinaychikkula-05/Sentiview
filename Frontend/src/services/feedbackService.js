@@ -10,20 +10,18 @@ const getAPIUrl = () => {
   if (process.env.REACT_APP_API_URL) {
     return process.env.REACT_APP_API_URL;
   }
-  if (window.location.hostname === 'sentiview-ten.vercel.app') {
+  if (typeof window !== 'undefined' && window.location.hostname === 'sentiview-ten.vercel.app') {
     return 'https://airy-tranquility-production-da57.up.railway.app';
   }
   return 'http://localhost:5000';
 };
-
-const API_BASE = `${getAPIUrl()}/api/feedback`;
 
 export const feedbackService = {
   // Upload CSV file
   uploadCSV: async (file) => {
     const formData = new FormData();
     formData.append('file', file);
-    const response = await axios.post(`${API_BASE}/upload`, formData, {
+    const response = await axios.post(`${getAPIUrl()}/api/feedback/upload`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -33,7 +31,7 @@ export const feedbackService = {
 
   // Add single feedback
   addFeedback: async (clientName, feedback, rating, category) => {
-    const response = await axios.post(`${API_BASE}`, {
+    const response = await axios.post(`${getAPIUrl()}/api/feedback`, {
       clientName,
       feedback,
       rating,
@@ -49,13 +47,13 @@ export const feedbackService = {
     if (filters.endDate) params.append('endDate', filters.endDate);
     if (filters.sentiment) params.append('sentiment', filters.sentiment);
 
-    const response = await axios.get(`${API_BASE}?${params.toString()}`);
+    const response = await axios.get(`${getAPIUrl()}/api/feedback?${params.toString()}`);
     return response.data;
   },
 
   // Get feedback by ID
   getFeedbackById: async (id) => {
-    const response = await axios.get(`${API_BASE}/${id}`);
+    const response = await axios.get(`${getAPIUrl()}/api/feedback/${id}`);
     return response.data;
   },
 
@@ -65,13 +63,13 @@ export const feedbackService = {
     if (filters.startDate) params.append('startDate', filters.startDate);
     if (filters.endDate) params.append('endDate', filters.endDate);
 
-    const response = await axios.get(`${API_BASE}/analytics/summary?${params.toString()}`);
+    const response = await axios.get(`${getAPIUrl()}/api/feedback/analytics/summary?${params.toString()}`);
     return response.data;
   },
 
   // Delete feedback
   deleteFeedback: async (id) => {
-    const response = await axios.delete(`${API_BASE}/${id}`);
+    const response = await axios.delete(`${getAPIUrl()}/api/feedback/${id}`);
     return response.data;
   },
 };

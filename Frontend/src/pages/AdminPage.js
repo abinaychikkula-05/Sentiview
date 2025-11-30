@@ -13,13 +13,11 @@ const getAPIUrl = () => {
   if (process.env.REACT_APP_API_URL) {
     return process.env.REACT_APP_API_URL;
   }
-  if (window.location.hostname === 'sentiview-ten.vercel.app') {
+  if (typeof window !== 'undefined' && window.location.hostname === 'sentiview-ten.vercel.app') {
     return 'https://airy-tranquility-production-da57.up.railway.app';
   }
   return 'http://localhost:5000';
 };
-
-const API_URL = getAPIUrl();
 
 const AdminPage = () => {
   const { user, token } = useAuth();
@@ -53,7 +51,7 @@ const AdminPage = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API_URL}/api/admin/users`, {
+      const res = await fetch(`${getAPIUrl()}/api/admin/users`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -70,7 +68,7 @@ const AdminPage = () => {
 
   const fetchStats = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/admin/stats`, {
+      const res = await fetch(`${getAPIUrl()}/api/admin/stats`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -85,7 +83,7 @@ const AdminPage = () => {
 
   const deleteUser = async (userId, username) => {
     try {
-      const res = await fetch(`${API_URL}/api/admin/users/${userId}`, {
+      const res = await fetch(`${getAPIUrl()}/api/admin/users/${userId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -130,7 +128,7 @@ const AdminPage = () => {
 
   const saveLayout = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/admin/settings/layout`, {
+      const res = await fetch(`${getAPIUrl()}/api/admin/settings/layout`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

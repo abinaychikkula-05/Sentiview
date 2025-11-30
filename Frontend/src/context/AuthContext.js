@@ -61,7 +61,9 @@ export const AuthProvider = ({ children }) => {
   const register = async (username, email, password, company) => {
     setLoading(true);
     try {
-      const response = await axios.post(`${getAPIUrl()}/api/auth/register`, {
+      const apiUrl = getAPIUrl();
+      console.log('Registering with URL:', apiUrl);
+      const response = await axios.post(`${apiUrl}/api/auth/register`, {
         username,
         email,
         password,
@@ -71,7 +73,14 @@ export const AuthProvider = ({ children }) => {
       setUser(response.data.user);
       return response.data;
     } catch (error) {
-      throw error.response?.data || error;
+      console.error('Register error:', error);
+      if (error.response?.data) {
+        throw error.response.data;
+      } else if (error.message) {
+        throw { message: error.message, error };
+      } else {
+        throw { message: 'Network error or server unreachable', error };
+      }
     } finally {
       setLoading(false);
     }
@@ -80,7 +89,9 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const response = await axios.post(`${getAPIUrl()}/api/auth/login`, {
+      const apiUrl = getAPIUrl();
+      console.log('Logging in with URL:', apiUrl);
+      const response = await axios.post(`${apiUrl}/api/auth/login`, {
         email,
         password,
       });
@@ -88,7 +99,14 @@ export const AuthProvider = ({ children }) => {
       setUser(response.data.user);
       return response.data;
     } catch (error) {
-      throw error.response?.data || error;
+      console.error('Login error:', error);
+      if (error.response?.data) {
+        throw error.response.data;
+      } else if (error.message) {
+        throw { message: error.message, error };
+      } else {
+        throw { message: 'Network error or server unreachable', error };
+      }
     } finally {
       setLoading(false);
     }

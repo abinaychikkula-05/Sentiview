@@ -1,6 +1,7 @@
 /**
  * Main App Component
  * Routing and authentication wrapper
+ * Production: CORS fixed in backend
  */
 
 import React from 'react';

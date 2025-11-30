@@ -8,17 +8,22 @@ import axios from 'axios';
 
 // Determine API URL based on environment
 const getAPIUrl = () => {
-  // First check if explicitly set in environment
+  // First check if explicitly set in environment (build-time variable)
   if (process.env.REACT_APP_API_URL) {
+    console.log('Using REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
     return process.env.REACT_APP_API_URL;
   }
   
-  // Check if window is available (browser environment)
-  if (typeof window !== 'undefined' && window.location.hostname === 'sentiview-ten.vercel.app') {
+  // Runtime detection for production Vercel deployment
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
+  console.log('Current hostname:', hostname);
+  
+  if (hostname.includes('vercel.app')) {
+    console.log('Detected Vercel deployment, using Railway backend');
     return 'https://airy-tranquility-production-da57.up.railway.app';
   }
   
-  // Fallback for local development
+  // Default for local development
   return 'http://localhost:5000';
 };
 

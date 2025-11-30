@@ -10,7 +10,8 @@ const getAPIUrl = () => {
   if (process.env.REACT_APP_API_URL) {
     return process.env.REACT_APP_API_URL;
   }
-  if (typeof window !== 'undefined' && window.location.hostname === 'sentiview-ten.vercel.app') {
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
+  if (hostname.includes('vercel.app')) {
     return 'https://airy-tranquility-production-da57.up.railway.app';
   }
   return 'http://localhost:5000';

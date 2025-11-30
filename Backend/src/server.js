@@ -30,10 +30,33 @@ const allowedOrigins = [
 app.use(cors({
   origin: allowedOrigins,
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400, // 24 hours
 }));
+
+// Security headers
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  next();
+});
 
 // Serve uploaded files
 app.use('/uploads', express.static('uploads'));
+
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`📨 ${req.method} ${req.path} from ${req.get('origin') || 'unknown'}`);
+  
+  // Set timeout for requests
+  req.setTimeout(30000); // 30 seconds
+  
+  next();
+});
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));

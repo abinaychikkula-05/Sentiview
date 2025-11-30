@@ -34,6 +34,13 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(false);
 
+  // Configure axios defaults
+  useEffect(() => {
+    // Set CORS credentials to include
+    axios.defaults.withCredentials = true;
+    console.log('✅ Axios configured with CORS credentials');
+  }, []);
+
   // Set default axios header when token changes
   useEffect(() => {
     if (token) {
@@ -109,12 +116,16 @@ export const AuthProvider = ({ children }) => {
       
       const loginUrl = `${apiUrl}/api/auth/login`;
       console.log('📍 Full URL:', loginUrl);
-      
       console.log('📤 Sending POST request...');
+      
+      // Add timeout to axios request
       const response = await axios.post(loginUrl, {
         email,
         password,
+      }, {
+        timeout: 10000, // 10 second timeout
       });
+      
       console.log('✅ Login successful:', response.data);
       
       setToken(response.data.token);
@@ -122,11 +133,15 @@ export const AuthProvider = ({ children }) => {
       return response.data;
     } catch (error) {
       console.error('❌ Login error:', error);
+      console.error('Error type:', error.constructor.name);
       console.error('Error details:', {
         message: error.message,
         code: error.code,
+        isAxiosError: error.isAxiosError,
         response: error.response?.data,
         status: error.response?.status,
+        statusText: error.response?.statusText,
+        headers: error.response?.headers,
       });
       
       if (error.response?.data) {

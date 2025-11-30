@@ -1,6 +1,7 @@
 /**
  * Main Server File
  * SentiView: Client Feedback Analysis and Sentiment Dashboard
+ * v2.0 - CORS preflight fix deployed
  */
 
 require('dotenv').config();

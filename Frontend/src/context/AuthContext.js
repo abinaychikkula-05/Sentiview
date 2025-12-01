@@ -37,8 +37,8 @@ export const AuthProvider = ({ children }) => {
   // Configure axios defaults
   useEffect(() => {
     // Set CORS credentials to include
-    axios.defaults.withCredentials = true;
-    console.log('✅ Axios configured with CORS credentials');
+    // axios.defaults.withCredentials = true; // Disabled to prevent CORS issues on strict networks
+    console.log('✅ Axios configured');
   }, []);
 
   // Set default axios header when token changes

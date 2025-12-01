@@ -8,6 +8,9 @@
   position: relative;
   overflow-x: hidden;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Force light mode for landing page to prevent browser auto-darkening issues */
+  color-scheme: light;
+  color: #0f172a;
 }
 
 /* Background Shapes */
@@ -157,7 +160,7 @@
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 24px;
-  color: #0f172a;
+  color: #0f172a !important;
   letter-spacing: -1.5px;
 }
 
@@ -166,11 +169,13 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  /* Ensure gradient text is visible */
+  display: inline-block;
 }
 
 .hero-subtitle {
   font-size: 20px;
-  color: #64748b;
+  color: #475569 !important;
   margin-bottom: 40px;
   line-height: 1.6;
 }
@@ -217,12 +222,14 @@
 .stat-value {
   font-size: 24px;
   font-weight: 700;
-  color: #0f172a;
+  color: #0f172a !important;
+  display: block;
 }
 
 .stat-label {
   font-size: 14px;
-  color: #64748b;
+  color: #475569 !important;
+  font-weight: 500;
 }
 
 .stat-divider {

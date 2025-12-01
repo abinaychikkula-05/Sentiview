@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
+        // credentials: 'include', // Removed to prevent CORS issues on some networks
         body: JSON.stringify({
           username,
           email,
@@ -135,7 +135,7 @@ export const AuthProvider = ({ children }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
+        // credentials: 'include', // Removed to prevent CORS issues on some networks
         body: JSON.stringify({
           email,
           password,

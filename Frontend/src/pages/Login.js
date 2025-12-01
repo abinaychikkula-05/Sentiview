@@ -69,7 +69,7 @@ const Login = () => {
             </button>
           </form>
           <p className="auth-footer">
-            <Link to="/forgot-password" className="link" style={{ fontSize: '13px', color: '#2563eb', marginRight: '8px' }}>
+            <Link to="/forgot-password" className="link" style={{ fontSize: '13px', marginRight: '8px' }}>
               Forgot Password?
             </Link>
             |

@@ -97,6 +97,10 @@ export const AuthProvider = ({ children }) => {
         throw data || { message: 'Registration failed' };
       }
       
+      // Set token immediately for subsequent requests
+      localStorage.setItem('token', data.token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+      
       setToken(data.token);
       setUser(data.user);
       return data;
@@ -145,6 +149,10 @@ export const AuthProvider = ({ children }) => {
       if (!response.ok) {
         throw new Error(data?.message || 'Login failed');
       }
+      
+      // Set token immediately for subsequent requests
+      localStorage.setItem('token', data.token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
       
       setToken(data.token);
       setUser(data.user);

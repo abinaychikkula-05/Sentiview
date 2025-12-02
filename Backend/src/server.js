@@ -27,10 +27,12 @@ console.log('📍 CORS allowed origins:', allowedOrigins);
 app.use((req, res, next) => {
   const origin = req.get('origin');
   
-  // Allow all Vercel deployments and localhost
+  // Allow all Vercel deployments, localhost, and GitHub Codespaces
   const isAllowedOrigin = !origin || 
     allowedOrigins.includes(origin) || 
     origin.endsWith('.vercel.app') ||
+    origin.includes('github.dev') ||
+    origin.includes('githubusercontent.com') ||
     origin.includes('localhost');
 
   console.log(`🔍 CORS Check: Origin=${origin}, Allowed=${isAllowedOrigin}`);
@@ -75,7 +77,11 @@ app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-  res.setHeader('Cache-Control', 'public, max-age=3600');
+  // Disable caching for API responses to ensure real-time data
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.setHeader('Surrogate-Control', 'no-store');
   next();
 });
 

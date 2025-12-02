@@ -87,7 +87,23 @@ const Dashboard = () => {
   async function loadFeedback() {
     setLoading(true);
     try {
+      console.log('🔄 Fetching feedback...');
       const res = await feedbackService.getAllFeedback();
+      console.log('✅ Feedback fetched RAW:', JSON.stringify(res, null, 2));
+      
+      if (typeof res === 'string') {
+        console.error('❌ Received string response instead of JSON. Proxy might be returning HTML.');
+        setError('Failed to load feedback (Invalid response format)');
+        setFeedback([]);
+        return;
+      }
+
+      if (res.data) {
+        console.log(`📊 Data length: ${res.data.length}`);
+      } else {
+        console.warn('⚠️ res.data is missing!');
+      }
+
       setFeedback(res.data || []);
       setStats(res.stats || null);
       setError(null);
@@ -112,7 +128,7 @@ const Dashboard = () => {
         <header className="dashboard-header">
           <div className="header-left">
             <h1>SentiView Dashboard</h1>
-            {user && <p className="user-info">Welcome, {user.username}!</p>}
+            {user && <p className="user-info">Welcome, {user.username} ({user.email})!</p>}
           </div>
           <div className="header-right">
             <button

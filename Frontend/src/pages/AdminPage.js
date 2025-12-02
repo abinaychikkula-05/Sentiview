@@ -3,21 +3,26 @@
  * Admin controls for user management, system stats, and analytics
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Components.css';
 
 // Determine API URL based on environment
 const getAPIUrl = () => {
-  if (process.env.REACT_APP_API_URL) {
-    return process.env.REACT_APP_API_URL;
+  if (process.env.REACT_APP_BACKEND_URL) {
+    return process.env.REACT_APP_BACKEND_URL;
   }
   const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
-  if (hostname.includes('vercel.app')) {
-    return 'https://airy-tranquility-production-da57.up.railway.app';
+  
+  // Development (Localhost or Codespaces)
+  // Use relative path to leverage package.json proxy
+  if (hostname.includes('localhost') || hostname.includes('127.0.0.1') || hostname.includes('github.dev')) {
+    return '';
   }
-  return 'http://localhost:5000';
+  
+  // For ALL other deployments (Vercel, custom domains, mobile wrappers), use production backend
+  return 'https://airy-tranquility-production-da57.up.railway.app';
 };
 
 const AdminPage = () => {
@@ -42,13 +47,7 @@ const AdminPage = () => {
     }
   });
 
-  // Fetch users and stats on mount
-  useEffect(() => {
-    fetchUsers();
-    fetchStats();
-  }, [token]);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -65,9 +64,9 @@ const AdminPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const res = await fetch(`${getAPIUrl()}/api/admin/stats`, {
         headers: {
@@ -80,7 +79,13 @@ const AdminPage = () => {
     } catch (err) {
       console.error('Error fetching stats:', err);
     }
-  };
+  }, [token]);
+
+  // Fetch users and stats on mount
+  useEffect(() => {
+    fetchUsers();
+    fetchStats();
+  }, [fetchUsers, fetchStats]);
 
   const deleteUser = async (userId, username) => {
     try {

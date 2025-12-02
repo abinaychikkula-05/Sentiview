@@ -8,6 +8,23 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/Auth.css';
 
+// Determine API URL based on environment
+const getAPIUrl = () => {
+  if (process.env.REACT_APP_BACKEND_URL) {
+    return process.env.REACT_APP_BACKEND_URL;
+  }
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
+  
+  // Development (Localhost or Codespaces)
+  // Use relative path to leverage package.json proxy
+  if (hostname.includes('localhost') || hostname.includes('127.0.0.1') || hostname.includes('github.dev')) {
+    return '';
+  }
+  
+  // For ALL other deployments (Vercel, custom domains, mobile wrappers), use production backend
+  return 'https://airy-tranquility-production-da57.up.railway.app';
+};
+
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1); // Step 1: Verify identity, Step 2: Enter new password
@@ -33,7 +50,7 @@ const ForgotPassword = () => {
     setLoading(true);
     try {
       // Verify credentials
-      const response = await axios.post('/api/auth/login', {
+      const response = await axios.post(`${getAPIUrl()}/api/auth/login`, {
         email,
         password: oldPassword,
       });
@@ -77,7 +94,7 @@ const ForgotPassword = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post('/api/auth/reset-password', {
+      const response = await axios.post(`${getAPIUrl()}/api/auth/reset-password`, {
         username,
         email,
         oldPassword,

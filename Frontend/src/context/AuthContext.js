@@ -5,27 +5,7 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-
-// Determine API URL based on environment
-const getAPIUrl = () => {
-  // First check if explicitly set in environment (build-time variable)
-  if (process.env.REACT_APP_API_URL) {
-    console.log('Using REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
-    return process.env.REACT_APP_API_URL;
-  }
-  
-  // Runtime detection for production Vercel deployment
-  const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
-  console.log('Current hostname:', hostname);
-  
-  if (hostname.includes('vercel.app')) {
-    console.log('Detected Vercel deployment, using Railway backend');
-    return 'https://airy-tranquility-production-da57.up.railway.app';
-  }
-  
-  // Default for local development
-  return 'http://localhost:5000';
-};
+import { getAPIUrl } from '../utils/helpers';
 
 const AuthContext = createContext();
 
@@ -77,10 +57,11 @@ export const AuthProvider = ({ children }) => {
       
       const response = await fetch(registerUrl, {
         method: 'POST',
+        // mode: 'cors', // Removed explicit mode to let browser handle it naturally
         headers: {
           'Content-Type': 'application/json',
+          // 'Accept': 'application/json', // Removed to simplify headers
         },
-        // credentials: 'include', // Removed to prevent CORS issues on some networks
         body: JSON.stringify({
           username,
           email,
@@ -132,10 +113,11 @@ export const AuthProvider = ({ children }) => {
       
       const response = await fetch(loginUrl, {
         method: 'POST',
+        // mode: 'cors', // Removed explicit mode
         headers: {
           'Content-Type': 'application/json',
+          // 'Accept': 'application/json', // Removed
         },
-        // credentials: 'include', // Removed to prevent CORS issues on some networks
         body: JSON.stringify({
           email,
           password,
@@ -196,6 +178,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const resetPassword = async (oldPassword, newPassword) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${getAPIUrl()}/api/auth/reset-password`, {
+        oldPassword,
+        newPassword,
+      });
+      return response.data;
+    } catch (error) {
+      const err = new Error(error.response?.data?.message || 'Failed to reset password');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const value = {
     user,
     token,
@@ -204,6 +202,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     updateProfile,
+    resetPassword,
     isAuthenticated: !!token,
   };
 

@@ -8,16 +8,11 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    const mongoUri = process.env.MONGODB_URI;
-    
-    if (!mongoUri) {
-      console.warn('⚠️  WARNING: MONGODB_URI not set in environment variables');
-      console.log('Using in-memory database for development');
-      return null;
-    }
+    // Force local connection if not set, to match checkDB.js
+    const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/sentiview';
     
     console.log('🔄 Attempting to connect to MongoDB...');
-    console.log('Connection string format:', mongoUri.substring(0, 50) + '...');
+    console.log('Connection string:', mongoUri);
     
     const conn = await mongoose.connect(mongoUri, {
       useNewUrlParser: true,

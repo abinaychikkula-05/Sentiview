@@ -4,18 +4,7 @@
  */
 
 import axios from 'axios';
-
-// Determine API URL based on environment
-const getAPIUrl = () => {
-  if (process.env.REACT_APP_API_URL) {
-    return process.env.REACT_APP_API_URL;
-  }
-  const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
-  if (hostname.includes('vercel.app')) {
-    return 'https://airy-tranquility-production-da57.up.railway.app';
-  }
-  return 'http://localhost:5000';
-};
+import { getAPIUrl } from '../utils/helpers';
 
 export const feedbackService = {
   // Upload CSV file
@@ -47,6 +36,9 @@ export const feedbackService = {
     if (filters.startDate) params.append('startDate', filters.startDate);
     if (filters.endDate) params.append('endDate', filters.endDate);
     if (filters.sentiment) params.append('sentiment', filters.sentiment);
+    
+    // Add timestamp to prevent caching
+    params.append('_t', new Date().getTime());
 
     const response = await axios.get(`${getAPIUrl()}/api/feedback?${params.toString()}`);
     return response.data;

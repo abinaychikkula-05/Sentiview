@@ -14,7 +14,7 @@ if (!email || !password || !username) {
   process.exit(1);
 }
 
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/sentiview', {
+mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/sentiview', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -25,12 +25,12 @@ async function createOrUpdateAdmin() {
     if (user) {
       user.role = 'admin';
       user.username = username;
-      if (password) user.password = await bcrypt.hash(password, 10);
+      if (password) user.password = password; // Let the model pre-save hook hash it
       await user.save();
       console.log('Updated existing user to admin:', email);
     } else {
-      const hashed = await bcrypt.hash(password, 10);
-      user = new User({ email, password: hashed, username, role: 'admin' });
+      // For new user, just pass plain password, model will hash it
+      user = new User({ email, password, username, role: 'admin' });
       await user.save();
       console.log('Created new admin user:', email);
     }

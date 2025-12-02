@@ -37,6 +37,7 @@
   color: #2563eb;
   letter-spacing: 0.04em;
   background: none;
+  background-clip: border-box;
   -webkit-background-clip: initial;
   -webkit-text-fill-color: initial;
   text-shadow: 0 2px 12px #e3f0ff;

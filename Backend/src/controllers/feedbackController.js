@@ -79,6 +79,7 @@ exports.uploadFeedback = async (req, res, next) => {
  */
 exports.addFeedback = async (req, res, next) => {
   try {
+    console.log('📝 Adding feedback:', req.body);
     const { clientName, feedback, rating, category } = req.body;
 
     if (!feedback) {
@@ -89,6 +90,7 @@ exports.addFeedback = async (req, res, next) => {
     }
 
     const sentimentAnalysis = analyzeSentiment(feedback);
+    console.log('🧠 Sentiment analysis:', sentimentAnalysis);
 
     const feedbackDoc = await Feedback.create({
       userId: req.user.userId,
@@ -99,11 +101,14 @@ exports.addFeedback = async (req, res, next) => {
       category: category || 'General',
     });
 
+    console.log('✅ Feedback saved:', feedbackDoc._id);
+
     res.status(201).json({
       success: true,
       data: feedbackDoc,
     });
   } catch (error) {
+    console.error('❌ Error adding feedback:', error);
     next(error);
   }
 };
@@ -114,6 +119,7 @@ exports.addFeedback = async (req, res, next) => {
  */
 exports.getAllFeedback = async (req, res, next) => {
   try {
+    console.log('🔍 Fetching feedback for user:', req.user.userId);
     const { startDate, endDate, sentiment } = req.query;
     const filter = { userId: req.user.userId };
 
@@ -130,6 +136,7 @@ exports.getAllFeedback = async (req, res, next) => {
     }
 
     const feedback = await Feedback.find(filter).sort({ createdAt: -1 });
+    console.log(`✅ Found ${feedback.length} feedback items`);
 
     const stats = getSentimentStats(feedback.map((f) => f.sentiment));
 
@@ -140,6 +147,7 @@ exports.getAllFeedback = async (req, res, next) => {
       data: feedback,
     });
   } catch (error) {
+    console.error('❌ Error fetching feedback:', error);
     next(error);
   }
 };

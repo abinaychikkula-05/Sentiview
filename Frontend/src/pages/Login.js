@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Auth.css';
+import logo from '../assets/logo.svg';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -37,7 +38,10 @@ const Login = () => {
       </div>
       <div className="split-right">
         <div className="auth-box">
-          <h1 className="auth-title">Sentiview</h1>
+          <div className="auth-header">
+            <img src={logo} alt="SentiView Logo" className="auth-logo" />
+            <h1 className="auth-title">Sentiview</h1>
+          </div>
           <p className="auth-subtitle">Client Feedback Analysis Dashboard</p>
           <Link to="/" className="back-home-link" style={{ display: 'block', marginBottom: '20px', color: '#64748b', textDecoration: 'none', fontSize: '14px' }}>← Back to Home</Link>
           <form onSubmit={handleSubmit} className="auth-form">

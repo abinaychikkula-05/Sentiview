@@ -30,6 +30,19 @@
   margin: 0;
 }
 
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dashboard-logo {
+  height: 40px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
 .header-left {
   display: flex;
   flex-direction: column;

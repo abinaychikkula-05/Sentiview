@@ -78,11 +78,25 @@
   z-index: 1;
 }
 
+.auth-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.auth-logo {
+  height: 48px;
+  width: auto;
+  filter: drop-shadow(0 4px 6px rgba(37, 99, 235, 0.2));
+}
+
 .auth-title {
   font-size: 2rem;
   font-weight: 600;
   color: #2563eb;
-  margin-bottom: 8px;
+  margin-bottom: 0;
   text-align: center;
   letter-spacing: 0.06em;
 }

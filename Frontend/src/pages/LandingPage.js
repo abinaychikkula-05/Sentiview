@@ -44,7 +44,6 @@ const LandingPage = () => {
           <Link to="/login" className="nav-link mobile-only">Sign In</Link>
           <Link to="/register" className="nav-link mobile-only">Sign Up</Link>
           <a href="#contact" className="nav-link mobile-only">Contact</a>
-          <a href="#contact" className="nav-link mobile-only">Help</a>
           
           <div className="desktop-auth-buttons">
             <Link to="/login" className="btn btn-primary btn-glow">Sign In</Link>

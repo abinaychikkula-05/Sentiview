@@ -140,10 +140,11 @@ const Dashboard = () => {
               {isDark ? '☀️' : '🌙'}
             </button>
             <button
-              className="btn btn-secondary"
+              className="btn btn-primary"
               onClick={() => setShowUpload(!showUpload)}
+              style={{ backgroundColor: '#3b82f6', color: 'white', border: 'none' }}
             >
-              {showUpload ? 'Hide Upload' : 'Upload Feedback'}
+              {showUpload ? 'Hide Upload' : 'Add Feedback'}
             </button>
             <Link to="/settings" className="btn btn-ghost">
               Settings
@@ -192,7 +193,7 @@ const Dashboard = () => {
                 {['All', 'Positive', 'Negative', 'Neutral'].map((sentiment) => (
                   <button
                     key={sentiment}
-                    className={`filter-btn ${filter === sentiment ? 'active' : ''}`}
+                    className={`filter-btn ${filter === sentiment ? 'active' : ''} filter-btn-${sentiment.toLowerCase()}`}
                     onClick={() => handleFilterChange(sentiment)}
                   >
                     {sentiment}

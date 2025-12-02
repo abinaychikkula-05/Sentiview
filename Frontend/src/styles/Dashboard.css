@@ -174,15 +174,40 @@
 }
 
 .filter-btn:hover {
-  border-color: var(--secondary-color);
-  color: var(--secondary-color);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.filter-btn.active {
-  background-color: var(--secondary-color);
-  border-color: var(--secondary-color);
-  color: var(--white);
+/* Specific Filter Colors */
+.filter-btn-all.active {
+  background-color: #3b82f6; /* Blue */
+  border-color: #3b82f6;
+  color: white;
 }
+
+.filter-btn-positive.active {
+  background-color: #10b981; /* Green */
+  border-color: #10b981;
+  color: white;
+}
+
+.filter-btn-negative.active {
+  background-color: #ef4444; /* Red */
+  border-color: #ef4444;
+  color: white;
+}
+
+.filter-btn-neutral.active {
+  background-color: #f59e0b; /* Amber/Orange */
+  border-color: #f59e0b;
+  color: white;
+}
+
+/* Hover states for non-active buttons */
+.filter-btn-all:hover:not(.active) { border-color: #3b82f6; color: #3b82f6; }
+.filter-btn-positive:hover:not(.active) { border-color: #10b981; color: #10b981; }
+.filter-btn-negative:hover:not(.active) { border-color: #ef4444; color: #ef4444; }
+.filter-btn-neutral:hover:not(.active) { border-color: #f59e0b; color: #f59e0b; }
 
 .no-data {
   text-align: center;

@@ -23,10 +23,7 @@ const LandingPage = () => {
           <div className="brand-logo">
             <Logo className="landing-logo" />
           </div>
-          <div className="brand-text">
-            SentiView
-            <span className="brand-tagline">: Client Feedback Analysis and Sentiment Dashboard</span>
-          </div>
+          <div className="brand-text">SentiView: Client Feedback Analysis and Sentiment Dashboard</div>
         </div>
         <nav className="landing-nav">
           <Link to="/login" className="btn btn-primary btn-glow">Sign In</Link>

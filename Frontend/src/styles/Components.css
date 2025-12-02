@@ -277,32 +277,43 @@
 /* Sentiment Charts */
 .sentiment-charts {
   background-color: var(--white);
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 16px;
+  padding: 24px;
   box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
   transition: background-color 0.3s ease;
 }
 
 /* Dark mode sentiment charts */
 [data-theme='dark'] .sentiment-charts {
   background-color: #3a3a4d;
+  border-color: #4a4a5d;
 }
 
 .stats-summary {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
+  gap: 20px;
   margin-bottom: 30px;
 }
 
 .sentiment-card {
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 12px;
   text-align: center;
   background-color: #ffffff;
   border: 1px solid var(--border-color);
-  box-shadow: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
   color: var(--text-dark);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sentiment-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 /* Ensure white background even in dark mode as requested */
@@ -312,18 +323,18 @@
   color: #1e293b;
 }
 
-/* Removed border-top: none to ensure the box is closed properly */
-/* .sentiment-card.positive,
-.sentiment-card.negative,
-.sentiment-card.neutral,
-.sentiment-card.overall {
-} */
+/* Professional Accents */
+.sentiment-card.positive { border-top: 4px solid var(--success-color); }
+.sentiment-card.negative { border-top: 4px solid var(--danger-color); }
+.sentiment-card.neutral { border-top: 4px solid var(--warning-color); }
+.sentiment-card.overall { border-top: 4px solid var(--primary-color); }
 
 .sentiment-card .stat-value {
   font-size: 28px;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 5px;
   color: #1e293b;
+  letter-spacing: -0.02em;
 }
 
 [data-theme='dark'] .sentiment-card .stat-value {
@@ -331,9 +342,11 @@
 }
 
 .sentiment-card .stat-label {
-  font-size: 14px;
+  font-size: 13px;
   color: #64748b;
-  font-weight: 500;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 [data-theme='dark'] .sentiment-card .stat-label {

@@ -24,7 +24,7 @@ const ProtectedRoute = ({ children }) => {
     return <div className="loading-page">Loading...</div>;
   }
 
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  return isAuthenticated ? children : <Navigate to="/" />;
 };
 
 // Admin-only route
@@ -33,7 +33,7 @@ const AdminRoute = ({ children }) => {
 
   if (loading) return <div className="loading-page">Loading...</div>;
 
-  if (!isAuthenticated) return <Navigate to="/login" />;
+  if (!isAuthenticated) return <Navigate to="/" />;
 
   return user && user.role === 'admin' ? children : <Navigate to="/dashboard" />;
 };

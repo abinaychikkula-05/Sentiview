@@ -69,16 +69,18 @@
 .brand-container {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
-.brand-logo svg {
+.landing-logo {
+  height: 48px;
+  width: auto;
   display: block;
   transition: transform 0.3s ease;
   filter: drop-shadow(0 4px 10px rgba(37, 99, 235, 0.2));
 }
 
-.brand-container:hover .brand-logo svg {
+.brand-container:hover .landing-logo {
   transform: scale(1.05) rotate(-5deg);
 }
 

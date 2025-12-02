@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/LandingPage.css';
+import logo from '../assets/logo.svg';
 
 const LandingPage = () => {
   const { isAuthenticated } = useAuth();
@@ -20,17 +21,7 @@ const LandingPage = () => {
       <header className="landing-header">
         <div className="brand-container">
           <div className="brand-logo">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="40" height="40" rx="12" fill="url(#logo_gradient)" />
-              <path d="M10 20C10 20 13.5 14 20 14C26.5 14 30 20 30 20" stroke="white" strokeWidth="3" strokeLinecap="round"/>
-              <path d="M10 25C10 25 13.5 20 20 20C26.5 20 30 25 30 25" stroke="white" strokeWidth="3" strokeLinecap="round" strokeOpacity="0.7"/>
-              <defs>
-                <linearGradient id="logo_gradient" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#2563eb"/>
-                  <stop offset="1" stopColor="#7c3aed"/>
-                </linearGradient>
-              </defs>
-            </svg>
+            <img src={logo} alt="SentiView Logo" className="landing-logo" />
           </div>
           <div className="brand-text">SentiView: Client Feedback Analysis and Sentiment Dashboard</div>
         </div>

@@ -41,8 +41,8 @@ const SentimentCharts = ({ stats, feedback }) => {
   const colorNeutral = '#FBBF24'; // Bright Yellow
   
   // Chart text colors based on theme
-  const textColor = isDark ? '#f1f5f9' : '#1e293b';
-  const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+  const textColor = isDark ? '#ffffff' : '#1e293b';
+  const gridColor = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.1)';
 
   const hexToRgba = (hex, alpha = 0.12) => {
     try {
@@ -141,8 +141,8 @@ const SentimentCharts = ({ stats, feedback }) => {
           color: textColor,
           font: {
             family: "'Inter', sans-serif",
-            size: 12,
-            weight: 600
+            size: 14,
+            weight: 700
           }
         }
       },
@@ -150,20 +150,31 @@ const SentimentCharts = ({ stats, feedback }) => {
         display: false,
       },
       tooltip: {
-        backgroundColor: isDark ? 'rgba(30, 41, 59, 0.9)' : 'rgba(255, 255, 255, 0.9)',
-        titleColor: isDark ? '#f1f5f9' : '#1e293b',
-        bodyColor: isDark ? '#cbd5e1' : '#64748b',
-        borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+        backgroundColor: isDark ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+        titleColor: isDark ? '#ffffff' : '#1e293b',
+        bodyColor: isDark ? '#e2e8f0' : '#64748b',
+        borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)',
         borderWidth: 1,
-        padding: 10,
+        padding: 12,
         cornerRadius: 8,
         displayColors: true,
+        titleFont: {
+          size: 14,
+          weight: 700
+        },
+        bodyFont: {
+          size: 13
+        }
       }
     },
     scales: {
       x: {
         ticks: {
           color: textColor,
+          font: {
+            size: 12,
+            weight: 600
+          }
         },
         grid: {
           color: gridColor,
@@ -172,6 +183,10 @@ const SentimentCharts = ({ stats, feedback }) => {
       y: {
         ticks: {
           color: textColor,
+          font: {
+            size: 12,
+            weight: 600
+          }
         },
         grid: {
           color: gridColor,
@@ -180,9 +195,16 @@ const SentimentCharts = ({ stats, feedback }) => {
     },
     elements: {
       arc: {
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: isDark ? '#1e293b' : '#ffffff',
       },
+      line: {
+        borderWidth: 3
+      },
+      point: {
+        radius: 4,
+        hoverRadius: 6
+      }
     },
   };
   

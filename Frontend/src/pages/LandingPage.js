@@ -134,7 +134,6 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
-
         <section id="contact" className="contact-section">
           <div className="contact-content">
             <h2 className="section-title">Get in Touch</h2>

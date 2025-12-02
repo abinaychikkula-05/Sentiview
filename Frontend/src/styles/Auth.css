@@ -80,22 +80,23 @@
 
 .auth-header {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   margin-bottom: 8px;
 }
 
 .auth-logo {
-  height: 48px;
-  width: 48px;
-  min-width: 48px;
+  height: 40px;
+  width: 40px;
+  min-width: 40px;
   display: block;
   filter: drop-shadow(0 4px 6px rgba(37, 99, 235, 0.2));
 }
 
 .auth-title {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 600;
   color: #2563eb;
   margin-bottom: 0;

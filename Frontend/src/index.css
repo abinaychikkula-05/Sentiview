@@ -81,6 +81,7 @@ body {
   letter-spacing: 0.025em;
   box-shadow: var(--shadow-sm);
   color: var(--text-dark); /* Ensure text color inherits correctly */
+  text-decoration: none; /* Remove underline from links */
 }
 
 .btn:active {

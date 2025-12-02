@@ -134,6 +134,38 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
+
+        <section id="contact" className="contact-section">
+          <div className="contact-content">
+            <h2 className="section-title">Get in Touch</h2>
+            <div className="contact-card">
+              <div className="contact-info">
+                <h3>We're Here to Help</h3>
+                <p className="contact-desc">
+                  Ready to transform your customer feedback into actionable insights? 
+                  Whether you have questions about our AI models, need enterprise solutions, 
+                  or just want to say hello, our team is ready to assist you.
+                </p>
+                <div className="contact-details">
+                  <div className="contact-item">
+                    <span className="contact-icon">📧</span>
+                    <div className="contact-text">
+                      <span className="label">Email Us</span>
+                      <a href="mailto:admininfo@sentiview.com" className="value">admininfo@sentiview.com</a>
+                    </div>
+                  </div>
+                  <div className="contact-item">
+                    <span className="contact-icon">🌐</span>
+                    <div className="contact-text">
+                      <span className="label">Visit Us</span>
+                      <span className="value">www.sentiview.com</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer className="landing-footer">

@@ -218,22 +218,22 @@ const SentimentCharts = ({ stats, feedback }) => {
     <div className="sentiment-charts">
       {/* Summary Stats */}
       <div className="stats-summary">
-        <div className="stat-card positive">
+        <div className="sentiment-card positive">
           <div className="stat-value">{stats.positive || 0}</div>
           <div className="stat-label">Positive</div>
           <div className="stat-percentage">{stats.positivePercentage ?? 0}%</div>
         </div>
-        <div className="stat-card negative">
+        <div className="sentiment-card negative">
           <div className="stat-value">{stats.negative || 0}</div>
           <div className="stat-label">Negative</div>
           <div className="stat-percentage">{stats.negativePercentage ?? 0}%</div>
         </div>
-        <div className="stat-card neutral">
+        <div className="sentiment-card neutral">
           <div className="stat-value">{stats.neutral || 0}</div>
           <div className="stat-label">Neutral</div>
           <div className="stat-percentage">{stats.neutralPercentage ?? 0}%</div>
         </div>
-        <div className="stat-card overall">
+        <div className="sentiment-card overall">
           <div className="stat-value">{Number(stats.averageScore || 0).toFixed(2)}</div>
           <div className="stat-label">Avg Score</div>
           <div className="stat-percentage">-1 to +1</div>

@@ -11,6 +11,7 @@ import SentimentCharts from '../components/SentimentCharts';
 import UploadFeedback from '../components/UploadFeedback';
 import '../styles/Dashboard.css';
 import { feedbackService } from '../services/feedbackService';
+import Logo from '../components/Logo';
 
 const Dashboard = () => {
   const { user, logout, loading: authLoading, isAuthenticated, token } = useAuth();
@@ -105,7 +106,10 @@ const Dashboard = () => {
       {/* Header */}
       <header className="dashboard-header">
         <div className="header-left">
-          <h1>SentiView</h1>
+          <div className="logo-container">
+            <Logo className="dashboard-logo" />
+            <h1>SentiView</h1>
+          </div>
           <span className="user-info">
             Welcome back, {user?.username}
           </span>

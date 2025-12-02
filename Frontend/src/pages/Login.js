@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Auth.css';
-import logo from '../assets/logo.svg';
+import Logo from '../components/Logo';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const Login = () => {
       <div className="split-right">
         <div className="auth-box">
           <div className="auth-header">
-            <img src={logo} alt="SentiView Logo" className="auth-logo" />
+            <Logo className="auth-logo" />
             <h1 className="auth-title">Sentiview</h1>
           </div>
           <p className="auth-subtitle">Client Feedback Analysis Dashboard</p>

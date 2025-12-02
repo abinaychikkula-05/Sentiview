@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/LandingPage.css';
-import logo from '../assets/logo.svg';
+import Logo from '../components/Logo';
 
 const LandingPage = () => {
   const { isAuthenticated } = useAuth();
@@ -21,7 +21,7 @@ const LandingPage = () => {
       <header className="landing-header">
         <div className="brand-container">
           <div className="brand-logo">
-            <img src={logo} alt="SentiView Logo" className="landing-logo" />
+            <Logo className="landing-logo" />
           </div>
           <div className="brand-text">SentiView: Client Feedback Analysis and Sentiment Dashboard</div>
         </div>

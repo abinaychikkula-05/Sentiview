@@ -1,0 +1,26 @@
+import React from 'react';
+
+const Logo = ({ className }) => (
+  <svg 
+    className={className} 
+    viewBox="0 0 200 200" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <defs>
+      <linearGradient id="logo_gradient" x1="20" y1="20" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+        <stop stopColor="#4F46E5"/>
+        <stop offset="1" stopColor="#9333EA"/>
+      </linearGradient>
+    </defs>
+    <rect x="20" y="20" width="160" height="160" rx="40" fill="url(#logo_gradient)"/>
+    <path d="M55 100L85 135L115 65L145 100" stroke="white" strokeWidth="18" strokeLinecap="round" strokeLinejoin="round"/>
+    <circle cx="55" cy="100" r="6" fill="white"/>
+    <circle cx="85" cy="135" r="6" fill="white"/>
+    <circle cx="115" cy="65" r="6" fill="white"/>
+    <circle cx="145" cy="100" r="6" fill="white"/>
+  </svg>
+);
+
+export default Logo;

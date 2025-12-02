@@ -227,7 +227,7 @@
   text-align: center;
   background-color: #ffffff;
   border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
   color: var(--text-dark);
 }
 
@@ -238,20 +238,11 @@
   color: #1e293b;
 }
 
-.sentiment-card.positive {
-  border-top: 4px solid #22C55E;
-}
-
-.sentiment-card.negative {
-  border-top: 4px solid #EF4444;
-}
-
-.sentiment-card.neutral {
-  border-top: 4px solid #FBBF24;
-}
-
+.sentiment-card.positive,
+.sentiment-card.negative,
+.sentiment-card.neutral,
 .sentiment-card.overall {
-  border-top: 4px solid #3B82F6;
+  border-top: none;
 }
 
 .sentiment-card .stat-value {

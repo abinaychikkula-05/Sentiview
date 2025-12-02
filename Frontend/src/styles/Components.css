@@ -225,7 +225,7 @@
   padding: 20px;
   border-radius: 8px;
   text-align: center;
-  background-color: #ffffff;
+  background-color: #080808;
   border: 1px solid var(--border-color);
   box-shadow: none;
   color: var(--text-dark);
@@ -238,11 +238,12 @@
   color: #1e293b;
 }
 
+/* Removed border-top: none to ensure the box is closed properly */
 .sentiment-card.positive,
 .sentiment-card.negative,
 .sentiment-card.neutral,
 .sentiment-card.overall {
-  border-top: none;
+  /* No specific border-top color, inherits base border */
 }
 
 .sentiment-card .stat-value {

@@ -34,7 +34,7 @@ const LandingPage = () => {
           </div>
         </div>
         
-        <button className="hamburger-btn" onClick={toggleMenu} aria-label="Toggle menu">
+        <button type="button" className="hamburger-btn" onClick={toggleMenu} aria-label="Toggle menu">
           <span className={`hamburger-line ${isMenuOpen ? 'open' : ''}`}></span>
           <span className={`hamburger-line ${isMenuOpen ? 'open' : ''}`}></span>
           <span className={`hamburger-line ${isMenuOpen ? 'open' : ''}`}></span>
@@ -158,7 +158,7 @@ const LandingPage = () => {
                     <span className="contact-icon"><span role="img" aria-label="website">🌐</span></span>
                     <div className="contact-text">
                       <span className="label">Visit Us</span>
-                      <span className="value">www.sentiview.com</span>
+                      <a href="/" className="value">www.sentiview.com</a>
                     </div>
                   </div>
                 </div>

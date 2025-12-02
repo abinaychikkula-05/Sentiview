@@ -6,7 +6,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
-import { useTheme } from '../context/ThemeContext';
 import FeedbackList from '../components/FeedbackList';
 import SentimentCharts from '../components/SentimentCharts';
 import UploadFeedback from '../components/UploadFeedback';
@@ -15,7 +14,6 @@ import { feedbackService } from '../services/feedbackService';
 
 const Dashboard = () => {
   const { user, logout, loading: authLoading, isAuthenticated, token } = useAuth();
-  const { isDark, toggleTheme } = useTheme();
   const [feedback, setFeedback] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -118,13 +116,6 @@ const Dashboard = () => {
             <span className="time-separator">•</span>
             {currentTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
           </div>
-          <button
-            className="btn btn-secondary"
-            onClick={toggleTheme}
-            title="Toggle Theme"
-          >
-            {isDark ? '☀️' : '🌙'}
-          </button>
           <Link to="/settings" className="btn btn-secondary">
             Settings
           </Link>

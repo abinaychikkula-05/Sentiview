@@ -67,11 +67,7 @@
   color: var(--text-light);
 }
 
-[data-theme='dark'] .date-display {
-  background: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.1);
-}
+
 
 /* Stats Grid */
 .dashboard-stats {
@@ -184,32 +180,7 @@
   letter-spacing: -0.03em;
 }
 
-/* Dark mode overrides for stat cards */
-[data-theme='dark'] .stat-card {
-  background-color: #1e293b;
-  border-color: rgba(255, 255, 255, 0.05);
-}
 
-[data-theme='dark'] .stat-card.total {
-  background: linear-gradient(145deg, #1e293b 0%, #1e1b4b 100%);
-}
-[data-theme='dark'] .stat-card.positive {
-  background: linear-gradient(145deg, #1e293b 0%, #064e3b 100%);
-}
-[data-theme='dark'] .stat-card.negative {
-  background: linear-gradient(145deg, #1e293b 0%, #450a0a 100%);
-}
-[data-theme='dark'] .stat-card.neutral {
-  background: linear-gradient(145deg, #1e293b 0%, #451a03 100%);
-}
-
-[data-theme='dark'] .stat-card h3 {
-  color: #94a3b8;
-}
-
-[data-theme='dark'] .stat-card .stat-value {
-  color: #ffffff;
-}
 
 /* Main Content Layout */
 .dashboard-content {
@@ -240,16 +211,7 @@
   border: 1px solid var(--border-color);
 }
 
-/* Dark mode overrides for sections */
-[data-theme='dark'] .charts-section,
-[data-theme='dark'] .feedback-section {
-  background-color: var(--white); /* slate-800 */
-  border-color: var(--border-color);
-}
 
-[data-theme='dark'] .section-header h2 {
-  color: var(--text-dark); /* Pure white */
-}
 
 .section-header {
   display: flex;
@@ -372,15 +334,7 @@
   line-height: 1.6;
 }
 
-/* Dark mode feedback text */
-[data-theme='dark'] .feedback-text {
-  color: #e2e8f0; /* Light slate for better readability */
-}
 
-[data-theme='dark'] .feedback-item:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-color: var(--border-color);
-}
 
 .feedback-date {
   font-size: 0.75rem;

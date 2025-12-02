@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import { useTheme } from '../context/ThemeContext';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -33,16 +32,14 @@ ChartJS.register(
 );
 
 const SentimentCharts = ({ stats, feedback }) => {
-  const { isDark } = useTheme();
-  
   // Define explicit colors for better visibility
   const colorPositive = '#22C55E'; // Bright Green
   const colorNegative = '#EF4444'; // Bright Red
   const colorNeutral = '#FBBF24'; // Bright Yellow
   
   // Chart text colors based on theme
-  const textColor = isDark ? '#ffffff' : '#1e293b';
-  const gridColor = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.1)';
+  const textColor = '#1e293b';
+  const gridColor = 'rgba(0, 0, 0, 0.1)';
 
   const hexToRgba = (hex, alpha = 0.12) => {
     try {
@@ -150,10 +147,10 @@ const SentimentCharts = ({ stats, feedback }) => {
         display: false,
       },
       tooltip: {
-        backgroundColor: isDark ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.95)',
-        titleColor: isDark ? '#ffffff' : '#1e293b',
-        bodyColor: isDark ? '#e2e8f0' : '#64748b',
-        borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        titleColor: '#1e293b',
+        bodyColor: '#64748b',
+        borderColor: 'rgba(0, 0, 0, 0.1)',
         borderWidth: 1,
         padding: 12,
         cornerRadius: 8,
@@ -196,7 +193,7 @@ const SentimentCharts = ({ stats, feedback }) => {
     elements: {
       arc: {
         borderWidth: 2,
-        borderColor: isDark ? '#1e293b' : '#ffffff',
+        borderColor: '#ffffff',
       },
       line: {
         borderWidth: 3

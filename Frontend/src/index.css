@@ -46,8 +46,8 @@
   --light-bg: #0f172a; /* Slate-900 */
   --white: #1e293b; /* Slate-800 */
   --glass-bg: rgba(30, 41, 59, 0.9);
-  --text-dark: #f1f5f9;
-  --text-light: #94a3b8;
+  --text-dark: #ffffff; /* Pure White for better contrast */
+  --text-light: #cbd5e1; /* Slate-300 for better readability */
   --border-color: #334155;
   --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5);
 }
@@ -80,6 +80,7 @@ body {
   gap: 8px;
   letter-spacing: 0.025em;
   box-shadow: var(--shadow-sm);
+  color: var(--text-dark); /* Ensure text color inherits correctly */
 }
 
 .btn:active {
@@ -88,7 +89,7 @@ body {
 
 .btn-primary {
   background: var(--gradient-primary);
-  color: white;
+  color: white !important; /* Force white text on primary buttons */
 }
 
 .btn-primary:hover {
@@ -102,6 +103,17 @@ body {
   border: 1px solid var(--border-color);
 }
 
+/* Dark mode specific override for secondary buttons */
+[data-theme='dark'] .btn-secondary {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 .btn-secondary:hover {
   background-color: var(--light-bg);
   border-color: var(--text-light);
@@ -109,7 +121,7 @@ body {
 
 .btn-danger {
   background: var(--gradient-danger);
-  color: white;
+  color: white !important; /* Force white text */
 }
 
 .btn-danger:hover {

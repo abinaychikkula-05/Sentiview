@@ -97,6 +97,20 @@
   line-height: 1;
 }
 
+/* Dark mode overrides for stat cards */
+[data-theme='dark'] .stat-card {
+  background-color: var(--white); /* Uses the dark mode --white which is slate-800 */
+  border-color: var(--border-color);
+}
+
+[data-theme='dark'] .stat-card h3 {
+  color: var(--text-light);
+}
+
+[data-theme='dark'] .stat-card .stat-value {
+  color: var(--text-dark); /* Ensures white text in dark mode */
+}
+
 /* Main Content Layout */
 .dashboard-content {
   display: grid;
@@ -124,6 +138,17 @@
   border-radius: 20px;
   box-shadow: var(--shadow);
   border: 1px solid var(--border-color);
+}
+
+/* Dark mode overrides for sections */
+[data-theme='dark'] .charts-section,
+[data-theme='dark'] .feedback-section {
+  background-color: var(--white); /* slate-800 */
+  border-color: var(--border-color);
+}
+
+[data-theme='dark'] .section-header h2 {
+  color: var(--text-dark); /* Pure white */
 }
 
 .section-header {
@@ -245,6 +270,16 @@
   color: var(--text-dark);
   font-size: 0.95rem;
   line-height: 1.6;
+}
+
+/* Dark mode feedback text */
+[data-theme='dark'] .feedback-text {
+  color: #e2e8f0; /* Light slate for better readability */
+}
+
+[data-theme='dark'] .feedback-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-color);
 }
 
 .feedback-date {

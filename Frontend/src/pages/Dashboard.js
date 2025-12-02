@@ -138,25 +138,52 @@ const Dashboard = () => {
       {stats && (
         <div className="dashboard-stats">
           <div className="stat-card total">
-            <h3>Total Feedback</h3>
-            <div className="stat-value">{stats.total}</div>
+            <div className="stat-icon-wrapper">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+            </div>
+            <div className="stat-content">
+              <h3>Total Feedback</h3>
+              <div className="stat-value">{stats.total}</div>
+            </div>
           </div>
           <div className="stat-card positive">
-            <h3>Positive</h3>
-            <div className="stat-value">
-              {stats.positive || 0}
+            <div className="stat-icon-wrapper">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+              </svg>
+            </div>
+            <div className="stat-content">
+              <h3>Positive</h3>
+              <div className="stat-value">{stats.positive || 0}</div>
             </div>
           </div>
           <div className="stat-card negative">
-            <h3>Negative</h3>
-            <div className="stat-value">
-              {stats.negative || 0}
+            <div className="stat-icon-wrapper">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path>
+              </svg>
+            </div>
+            <div className="stat-content">
+              <h3>Negative</h3>
+              <div className="stat-value">{stats.negative || 0}</div>
             </div>
           </div>
           <div className="stat-card neutral">
-            <h3>Neutral</h3>
-            <div className="stat-value">
-              {stats.neutral || 0}
+            <div className="stat-icon-wrapper">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="8" y1="15" x2="16" y2="15"></line>
+                <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                <line x1="15" y1="9" x2="15.01" y2="9"></line>
+              </svg>
+            </div>
+            <div className="stat-content">
+              <h3>Neutral</h3>
+              <div className="stat-value">{stats.neutral || 0}</div>
             </div>
           </div>
         </div>

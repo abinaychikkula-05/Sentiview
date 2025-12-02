@@ -109,10 +109,15 @@ const Dashboard = () => {
         <div className="header-left">
           <h1>SentiView</h1>
           <span className="user-info">
-            Welcome back, {user?.username} • {currentTime.toLocaleTimeString()}
+            Welcome back, {user?.username}
           </span>
         </div>
         <div className="header-right">
+          <div className="date-display">
+            {currentTime.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+            <span className="time-separator">•</span>
+            {currentTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+          </div>
           <button
             className="btn btn-secondary"
             onClick={toggleTheme}

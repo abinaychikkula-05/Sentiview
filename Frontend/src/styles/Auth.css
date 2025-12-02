@@ -80,11 +80,20 @@
 
 .auth-header {
   display: flex;
-  flex-direction: row;
-  align-items: center;
   justify-content: center;
-  gap: 12px;
   margin-bottom: 8px;
+}
+
+.auth-brand-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.auth-brand-link:hover {
+  transform: scale(1.02);
 }
 
 .auth-logo {

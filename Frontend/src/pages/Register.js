@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Auth.css';
 import Logo from '../components/Logo';
@@ -55,8 +55,10 @@ const Register = () => {
       <div className="split-right">
         <div className="auth-box">
           <div className="auth-header">
-            <Logo className="auth-logo" />
-            <h1 className="auth-title">SentiView</h1>
+            <Link to="/" className="auth-brand-link">
+              <Logo className="auth-logo" />
+              <h1 className="auth-title">SentiView</h1>
+            </Link>
           </div>
           <p className="auth-subtitle">Create Your Account</p>
           <form onSubmit={handleSubmit} className="auth-form">

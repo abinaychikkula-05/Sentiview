@@ -39,8 +39,10 @@ const Login = () => {
       <div className="split-right">
         <div className="auth-box">
           <div className="auth-header">
-            <Logo className="auth-logo" />
-            <h1 className="auth-title">Sentiview</h1>
+            <Link to="/" className="auth-brand-link">
+              <Logo className="auth-logo" />
+              <h1 className="auth-title">Sentiview</h1>
+            </Link>
           </div>
           <p className="auth-subtitle">Client Feedback Analysis Dashboard</p>
           <Link to="/" className="back-home-link" style={{ display: 'block', marginBottom: '20px', color: '#64748b', textDecoration: 'none', fontSize: '14px' }}>← Back to Home</Link>

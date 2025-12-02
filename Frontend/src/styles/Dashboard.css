@@ -57,7 +57,7 @@
 }
 
 .stat-card {
-  background: var(--white);
+  background: #ffffff;
   padding: 1.5rem;
   border-radius: 16px;
   box-shadow: var(--shadow);
@@ -72,14 +72,9 @@
   box-shadow: var(--shadow-lg);
 }
 
+/* Removed gradient strip */
 .stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: var(--gradient-primary);
+  display: none;
 }
 
 .stat-card h3 {
@@ -88,28 +83,28 @@
   letter-spacing: 0.05em;
   color: var(--text-light);
   margin-bottom: 0.5rem;
-  font-weight: 600;
+  font-weight: 400; /* Normal weight */
 }
 
 .stat-card .stat-value {
   font-size: 2.5rem;
-  font-weight: 600;
+  font-weight: 400; /* Normal weight */
   color: var(--text-dark);
   line-height: 1;
 }
 
 /* Dark mode overrides for stat cards */
 [data-theme='dark'] .stat-card {
-  background-color: var(--white); /* Uses the dark mode --white which is slate-800 */
-  border-color: var(--border-color);
+  background-color: #ffffff; /* Force white in dark mode */
+  border-color: #e2e8f0;
 }
 
 [data-theme='dark'] .stat-card h3 {
-  color: var(--text-light);
+  color: #64748b; /* Slate-500 */
 }
 
 [data-theme='dark'] .stat-card .stat-value {
-  color: var(--text-dark); /* Ensures white text in dark mode */
+  color: #1e293b; /* Force dark text on white background */
 }
 
 /* Main Content Layout */

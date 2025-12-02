@@ -8,11 +8,23 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    // Force local connection if not set, to match checkDB.js
-    const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/sentiview';
+    let mongoUri = process.env.MONGODB_URI;
+
+    if (!mongoUri) {
+      console.warn('⚠️ MONGODB_URI environment variable is not defined.');
+      if (process.env.NODE_ENV === 'production') {
+        console.error('❌ FATAL ERROR: You are running in production (e.g., Railway) but MONGODB_URI is missing.');
+        console.error('   The app cannot connect to a database. Please set MONGODB_URI in your Railway Service Variables.');
+        console.error('   Example: mongodb+srv://<user>:<password>@cluster.mongodb.net/sentiview');
+      }
+      // Fallback for local development
+      mongoUri = 'mongodb://127.0.0.1:27017/sentiview';
+    }
     
     console.log('🔄 Attempting to connect to MongoDB...');
-    console.log('Connection string:', mongoUri);
+    // Mask password in logs
+    const maskedUri = mongoUri.replace(/:([^:@]+)@/, ':****@');
+    console.log(`Connection string: ${maskedUri}`);
     
     const conn = await mongoose.connect(mongoUri, {
       useNewUrlParser: true,

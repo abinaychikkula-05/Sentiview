@@ -12,6 +12,10 @@ const LandingPage = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
   }
@@ -41,9 +45,9 @@ const LandingPage = () => {
         </button>
 
         <nav className={`landing-nav ${isMenuOpen ? 'mobile-open' : ''}`}>
-          <Link to="/login" className="nav-link mobile-only">Sign In</Link>
-          <Link to="/register" className="nav-link mobile-only">Sign Up</Link>
-          <a href="#contact" className="nav-link mobile-only">Contact</a>
+          <Link to="/login" className="nav-link mobile-only" onClick={closeMenu}>Sign In</Link>
+          <Link to="/register" className="nav-link mobile-only" onClick={closeMenu}>Sign Up</Link>
+          <a href="#contact" className="nav-link mobile-only" onClick={closeMenu}>Contact</a>
           
           <div className="desktop-auth-buttons">
             <Link to="/login" className="btn btn-primary btn-glow">Sign In</Link>

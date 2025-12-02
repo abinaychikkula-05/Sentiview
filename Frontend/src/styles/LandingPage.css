@@ -74,7 +74,8 @@
 
 .landing-logo {
   height: 48px;
-  width: auto;
+  width: 48px;
+  min-width: 48px;
   display: block;
   transition: transform 0.3s ease;
   filter: drop-shadow(0 4px 10px rgba(37, 99, 235, 0.2));

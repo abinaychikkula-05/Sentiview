@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { useTheme } from '../context/ThemeContext';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -32,10 +33,16 @@ ChartJS.register(
 );
 
 const SentimentCharts = ({ stats, feedback }) => {
+  const { isDark } = useTheme();
+  
   // Define explicit colors for better visibility
   const colorPositive = '#22C55E'; // Bright Green
   const colorNegative = '#EF4444'; // Bright Red
   const colorNeutral = '#FBBF24'; // Bright Yellow
+  
+  // Chart text colors based on theme
+  const textColor = isDark ? '#f1f5f9' : '#1e293b';
+  const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
 
   const hexToRgba = (hex, alpha = 0.12) => {
     try {
@@ -130,16 +137,59 @@ const SentimentCharts = ({ stats, feedback }) => {
     plugins: {
       legend: {
         position: 'top',
+        labels: {
+          color: textColor,
+          font: {
+            family: "'Inter', sans-serif",
+            size: 12,
+            weight: 600
+          }
+        }
       },
       title: {
         display: false,
       },
+      tooltip: {
+        backgroundColor: isDark ? 'rgba(30, 41, 59, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+        titleColor: isDark ? '#f1f5f9' : '#1e293b',
+        bodyColor: isDark ? '#cbd5e1' : '#64748b',
+        borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+        borderWidth: 1,
+        padding: 10,
+        cornerRadius: 8,
+        displayColors: true,
+      }
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: textColor,
+        },
+        grid: {
+          color: gridColor,
+        }
+      },
+      y: {
+        ticks: {
+          color: textColor,
+        },
+        grid: {
+          color: gridColor,
+        }
+      }
     },
     elements: {
       arc: {
         borderWidth: 1,
+        borderColor: isDark ? '#1e293b' : '#ffffff',
       },
     },
+  };
+  
+  // Pie chart doesn't need scales
+  const pieOptions = {
+    ...chartOptions,
+    scales: {},
   };
 
   return (
@@ -174,7 +224,7 @@ const SentimentCharts = ({ stats, feedback }) => {
         <div className="chart-container">
           <h3 className="chart-title distribution">Sentiment Distribution</h3>
           <div className="chart">
-            <Pie data={distributionData} options={chartOptions} />
+            <Pie data={distributionData} options={pieOptions} />
           </div>
         </div>
 

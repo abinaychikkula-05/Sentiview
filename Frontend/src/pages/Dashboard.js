@@ -137,25 +137,25 @@ const Dashboard = () => {
       {/* Stats Grid */}
       {stats && (
         <div className="dashboard-stats">
-          <div className="stat-card">
+          <div className="stat-card total">
             <h3>Total Feedback</h3>
             <div className="stat-value">{stats.total}</div>
           </div>
-          <div className="stat-card">
+          <div className="stat-card positive">
             <h3>Positive</h3>
-            <div className="stat-value" style={{ color: 'var(--success-color)' }}>
+            <div className="stat-value">
               {stats.positive || 0}
             </div>
           </div>
-          <div className="stat-card">
+          <div className="stat-card negative">
             <h3>Negative</h3>
-            <div className="stat-value" style={{ color: 'var(--danger-color)' }}>
+            <div className="stat-value">
               {stats.negative || 0}
             </div>
           </div>
-          <div className="stat-card">
+          <div className="stat-card neutral">
             <h3>Neutral</h3>
-            <div className="stat-value" style={{ color: 'var(--warning-color)' }}>
+            <div className="stat-value">
               {stats.neutral || 0}
             </div>
           </div>

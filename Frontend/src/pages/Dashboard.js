@@ -139,19 +139,19 @@ const Dashboard = () => {
           <div className="stat-card">
             <h3>Positive</h3>
             <div className="stat-value" style={{ color: 'var(--success-color)' }}>
-              {stats.sentimentBreakdown?.Positive || 0}
+              {stats.positive || 0}
             </div>
           </div>
           <div className="stat-card">
             <h3>Negative</h3>
             <div className="stat-value" style={{ color: 'var(--danger-color)' }}>
-              {stats.sentimentBreakdown?.Negative || 0}
+              {stats.negative || 0}
             </div>
           </div>
           <div className="stat-card">
             <h3>Neutral</h3>
             <div className="stat-value" style={{ color: 'var(--warning-color)' }}>
-              {stats.sentimentBreakdown?.Neutral || 0}
+              {stats.neutral || 0}
             </div>
           </div>
         </div>

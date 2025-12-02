@@ -470,3 +470,17 @@
     font-size: 1.1rem;
   }
 }
+
+/* Logout Button */
+.btn-logout {
+  background-color: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-logout:hover {
+  background-color: #fee2e2;
+  color: #ef4444;
+  border-color: #fecaca;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
+}

@@ -123,7 +123,7 @@ const Dashboard = () => {
           <Link to="/settings" className="btn btn-secondary">
             Settings
           </Link>
-          <button className="btn btn-danger" onClick={logout}>
+          <button className="btn btn-logout" onClick={logout}>
             Logout
           </button>
         </div>

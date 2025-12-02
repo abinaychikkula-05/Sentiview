@@ -26,7 +26,7 @@ const LandingPage = () => {
       <header className="landing-header">
         <div className="brand-container">
           <div className="brand-logo">
-            <Logo className="landing-logo" />
+            <Logo className="landing-logo" aria-label="SentiView Logo" />
           </div>
           <div className="brand-text">
             SentiView
@@ -44,7 +44,7 @@ const LandingPage = () => {
           <Link to="/login" className="nav-link mobile-only">Sign In</Link>
           <Link to="/register" className="nav-link mobile-only">Sign Up</Link>
           <a href="#contact" className="nav-link mobile-only">Contact</a>
-          <a href="#help" className="nav-link mobile-only">Help</a>
+          <a href="#contact" className="nav-link mobile-only">Help</a>
           
           <div className="desktop-auth-buttons">
             <Link to="/login" className="btn btn-primary btn-glow">Sign In</Link>
@@ -56,7 +56,7 @@ const LandingPage = () => {
       <main className="landing-main">
         <section className="landing-hero">
           <div className="hero-content">
-            <div className="hero-badge">✨ AI-Powered Analytics</div>
+            <div className="hero-badge"><span role="img" aria-label="sparkles">✨</span> AI-Powered Analytics</div>
             <h1 className="hero-title">
               Turn Feedback into <br />
               <span className="text-gradient">Actionable Growth</span>
@@ -100,10 +100,10 @@ const LandingPage = () => {
               </div>
             </div>
             <div className="floating-card card-1">
-              <span>😊</span> Great Service!
+              <span role="img" aria-label="smile">😊</span> Great Service!
             </div>
             <div className="floating-card card-2">
-              <span>📈</span> Trending Up
+              <span role="img" aria-label="trend up">📈</span> Trending Up
             </div>
           </div>
         </section>
@@ -112,21 +112,21 @@ const LandingPage = () => {
           <h2 className="section-title">Why SentiView?</h2>
           <div className="features-grid">
             <div className="feature-card">
-              <div className="feature-icon-wrapper">📊</div>
+              <div className="feature-icon-wrapper"><span role="img" aria-label="chart">📊</span></div>
               <h3 className="feature-title">Sentiment Analysis</h3>
               <p className="feature-desc">
                 Automatically categorize feedback into positive, negative, or neutral sentiments using advanced AI models.
               </p>
             </div>
             <div className="feature-card">
-              <div className="feature-icon-wrapper">📈</div>
+              <div className="feature-icon-wrapper"><span role="img" aria-label="trend up">📈</span></div>
               <h3 className="feature-title">Trend Tracking</h3>
               <p className="feature-desc">
                 Visualize feedback trends over time to identify improvements or potential issues before they escalate.
               </p>
             </div>
             <div className="feature-card">
-              <div className="feature-icon-wrapper">🎯</div>
+              <div className="feature-icon-wrapper"><span role="img" aria-label="target">🎯</span></div>
               <h3 className="feature-title">Actionable Insights</h3>
               <p className="feature-desc">
                 Turn raw customer feedback into meaningful data that drives strategic business decisions.
@@ -148,14 +148,14 @@ const LandingPage = () => {
                 </p>
                 <div className="contact-details">
                   <div className="contact-item">
-                    <span className="contact-icon">📧</span>
+                    <span className="contact-icon"><span role="img" aria-label="email">📧</span></span>
                     <div className="contact-text">
                       <span className="label">Email Us</span>
                       <a href="mailto:admininfo@sentiview.com" className="value">admininfo@sentiview.com</a>
                     </div>
                   </div>
                   <div className="contact-item">
-                    <span className="contact-icon">🌐</span>
+                    <span className="contact-icon"><span role="img" aria-label="website">🌐</span></span>
                     <div className="contact-text">
                       <span className="label">Visit Us</span>
                       <span className="value">www.sentiview.com</span>

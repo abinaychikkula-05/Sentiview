@@ -94,6 +94,18 @@
   margin-bottom: 24px;
 }
 
+.error-message {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #fca5a5;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
 .auth-form {
   display: flex;
   flex-direction: column;

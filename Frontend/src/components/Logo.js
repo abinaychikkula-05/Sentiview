@@ -1,8 +1,6 @@
-import React, { useId } from 'react';
+import React from 'react';
 
 const Logo = ({ className }) => {
-  const gradientId = useId();
-  
   return (
     <svg 
       className={className} 
@@ -11,13 +9,7 @@ const Logo = ({ className }) => {
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="xMidYMid meet"
     >
-      <defs>
-        <linearGradient id={gradientId} x1="20" y1="20" x2="180" y2="180" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#4F46E5"/>
-          <stop offset="1" stopColor="#9333EA"/>
-        </linearGradient>
-      </defs>
-      <rect x="20" y="20" width="160" height="160" rx="40" fill={`url(#${gradientId})`}/>
+      <rect x="20" y="20" width="160" height="160" rx="40" fill="#4F46E5"/>
       <path d="M55 100L85 135L115 65L145 100" stroke="white" strokeWidth="18" strokeLinecap="round" strokeLinejoin="round"/>
       <circle cx="55" cy="100" r="6" fill="white"/>
       <circle cx="85" cy="135" r="6" fill="white"/>

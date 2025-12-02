@@ -16,7 +16,7 @@ const UploadFeedback = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
     clientName: '',
     feedback: '',
-    rating: 5,
+    rating: '',
     category: 'General',
   });
 
@@ -69,6 +69,11 @@ const UploadFeedback = ({ onSuccess }) => {
       return;
     }
 
+    if (!formData.rating) {
+      setError('Please select a rating');
+      return;
+    }
+
     try {
       setLoading(true);
       await feedbackService.addFeedback(
@@ -81,7 +86,7 @@ const UploadFeedback = ({ onSuccess }) => {
       setFormData({
         clientName: '',
         feedback: '',
-        rating: 5,
+        rating: '',
         category: 'General',
       });
       setTimeout(() => {
@@ -169,11 +174,12 @@ const UploadFeedback = ({ onSuccess }) => {
                 value={formData.rating}
                 onChange={handleFormChange}
               >
-                <option value="1">1 - Poor</option>
-                <option value="2">2 - Fair</option>
-                <option value="3">3 - Good</option>
-                <option value="4">4 - Very Good</option>
-                <option value="5">5 - Excellent</option>
+                <option value="" disabled>Select Rating</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
               </select>
             </div>
 

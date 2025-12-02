@@ -453,3 +453,119 @@
     font-size: 48px;
   }
 }
+
+/* Hamburger Menu */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 20;
+}
+
+.hamburger-line {
+  width: 100%;
+  height: 3px;
+  background-color: #0f172a;
+  border-radius: 3px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hamburger Animation */
+.hamburger-line.open:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.hamburger-line.open:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-line.open:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+.mobile-only {
+  display: none;
+}
+
+.desktop-auth-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+/* Mobile Menu Styles */
+@media (max-width: 768px) {
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .desktop-auth-buttons {
+    display: none;
+  }
+
+  .landing-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    flex-direction: column;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out, padding 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    gap: 0;
+  }
+
+  .landing-nav.mobile-open {
+    max-height: 300px; /* Adjust based on content */
+    padding: 20px 0;
+    border-top: 1px solid #f1f5f9;
+  }
+
+  .nav-link.mobile-only {
+    display: block;
+    padding: 12px 24px;
+    color: #475569;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    text-align: center;
+    border-bottom: 1px solid #f8fafc;
+  }
+
+  .nav-link.mobile-only:hover {
+    background-color: #f8fafc;
+    color: #2563eb;
+  }
+  
+  .brand-text {
+    font-size: 18px; /* Smaller font for mobile */
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .landing-header {
+    padding: 16px 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .brand-tagline {
+    display: none;
+  }
+  
+  .brand-text {
+    max-width: none;
+    white-space: normal;
+    overflow: visible;
+  }
+}

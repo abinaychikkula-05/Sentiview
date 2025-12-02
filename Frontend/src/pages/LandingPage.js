@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/LandingPage.css';
@@ -6,6 +6,11 @@ import Logo from '../components/Logo';
 
 const LandingPage = () => {
   const { isAuthenticated } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
@@ -23,11 +28,28 @@ const LandingPage = () => {
           <div className="brand-logo">
             <Logo className="landing-logo" />
           </div>
-          <div className="brand-text">SentiView: Client Feedback Analysis and Sentiment Dashboard</div>
+          <div className="brand-text">
+            SentiView
+            <span className="brand-tagline">: Client Feedback Analysis and Sentiment Dashboard</span>
+          </div>
         </div>
-        <nav className="landing-nav">
-          <Link to="/login" className="btn btn-primary btn-glow">Sign In</Link>
-          <Link to="/register" className="btn btn-primary btn-glow">Sign Up</Link>
+        
+        <button className="hamburger-btn" onClick={toggleMenu} aria-label="Toggle menu">
+          <span className={`hamburger-line ${isMenuOpen ? 'open' : ''}`}></span>
+          <span className={`hamburger-line ${isMenuOpen ? 'open' : ''}`}></span>
+          <span className={`hamburger-line ${isMenuOpen ? 'open' : ''}`}></span>
+        </button>
+
+        <nav className={`landing-nav ${isMenuOpen ? 'mobile-open' : ''}`}>
+          <Link to="/login" className="nav-link mobile-only">Sign In</Link>
+          <Link to="/register" className="nav-link mobile-only">Sign Up</Link>
+          <a href="#contact" className="nav-link mobile-only">Contact</a>
+          <a href="#help" className="nav-link mobile-only">Help</a>
+          
+          <div className="desktop-auth-buttons">
+            <Link to="/login" className="btn btn-primary btn-glow">Sign In</Link>
+            <Link to="/register" className="btn btn-primary btn-glow">Sign Up</Link>
+          </div>
         </nav>
       </header>
 

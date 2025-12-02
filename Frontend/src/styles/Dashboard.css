@@ -41,7 +41,6 @@
   width: 40px;
   min-width: 40px;
   display: block;
-  object-fit: contain;
 }
 
 .header-left {

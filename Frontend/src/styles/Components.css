@@ -313,12 +313,11 @@
 }
 
 /* Removed border-top: none to ensure the box is closed properly */
-.sentiment-card.positive,
+/* .sentiment-card.positive,
 .sentiment-card.negative,
 .sentiment-card.neutral,
 .sentiment-card.overall {
-  /* No specific border-top color, inherits base border */
-}
+} */
 
 .sentiment-card .stat-value {
   font-size: 28px;

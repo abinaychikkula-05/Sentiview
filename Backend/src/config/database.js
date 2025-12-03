@@ -44,6 +44,33 @@ const connectDB = async () => {
     
     // In development, continue without MongoDB
     if (process.env.NODE_ENV !== 'production') {
+      console.log('⚠️ Local MongoDB not found. Attempting to start in-memory database...');
+      try {
+        const { MongoMemoryServer } = require('mongodb-memory-server');
+        const mongod = await MongoMemoryServer.create({
+          instance: {
+            port: 27017,
+            dbName: 'sentiview',
+          }
+        });
+        const uri = mongod.getUri();
+        console.log(`✅ In-memory MongoDB started at ${uri}`);
+        
+        const conn = await mongoose.connect(uri, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
+
+        // Seed data automatically
+        console.log('🌱 Seeding in-memory database...');
+        const seedDatabase = require('../scripts/seedData');
+        await seedDatabase(false);
+        
+        return conn;
+      } catch (memError) {
+        console.error('❌ Failed to start in-memory MongoDB:', memError);
+      }
+
       console.log('Running in development mode - continuing without MongoDB');
       return null;
     }

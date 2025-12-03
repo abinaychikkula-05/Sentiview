@@ -10,7 +10,7 @@ const connectDB = require('./config/database');
 const { errorHandler } = require('./middleware/errorHandler');
 
 // Connect to database
-connectDB();
+// connectDB();
 
 const app = express();
 
@@ -126,11 +126,17 @@ app.use(errorHandler);
 // Start server
 const PORT = process.env.PORT || 5000;
 
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`SentiView API running on port ${PORT}`);
-  });
-}
+const startServer = async () => {
+  await connectDB();
+  
+  if (require.main === module) {
+    app.listen(PORT, () => {
+      console.log(`SentiView API running on port ${PORT}`);
+    });
+  }
+};
+
+startServer();
 
 module.exports = app;
 

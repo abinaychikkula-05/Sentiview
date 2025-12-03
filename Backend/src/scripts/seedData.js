@@ -120,11 +120,13 @@ const sampleFeedback = [
   },
 ];
 
-const seedDatabase = async () => {
+const seedDatabase = async (shouldConnect = true) => {
   try {
-    // Connect to DB
-    await connectDB();
-    console.log('Connected to MongoDB');
+    // Connect to DB only if requested
+    if (shouldConnect) {
+      await connectDB();
+      console.log('Connected to MongoDB');
+    }
 
     // Find or create a test user
     let user = await User.findOne({ email: 'demo@sentiview.com' });
@@ -193,13 +195,18 @@ const seedDatabase = async () => {
     await Feedback.insertMany(feedbackDocs);
     console.log(`✅ Seeded ${feedbackDocs.length} feedback entries for demo user`);
 
-    // Close connection
-    mongoose.connection.close();
+    if (shouldConnect) {
+      mongoose.connection.close();
+    }
     console.log('Database seeding complete!');
   } catch (error) {
     console.error('❌ Error seeding database:', error.message);
-    process.exit(1);
+    if (shouldConnect) process.exit(1);
   }
 };
 
-seedDatabase();
+if (require.main === module) {
+  seedDatabase();
+}
+
+module.exports = seedDatabase;

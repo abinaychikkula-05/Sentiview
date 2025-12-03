@@ -16,6 +16,9 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
     console.log(`Ready to accept connections on port 27017...`);
     
     // Keep the process alive
+    setInterval(() => {}, 10000);
+    
+    // Handle termination signals
     process.on('SIGTERM', async () => {
       await mongod.stop();
       process.exit(0);

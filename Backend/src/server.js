@@ -31,9 +31,12 @@ app.use((req, res, next) => {
   const isAllowedOrigin = (() => {
     if (!origin) return true; // allow non-browser requests (e.g., curl)
     if (allowedOrigins.includes(origin)) return true;
-    if (origin.endsWith('.vercel.app')) return true;
+    // Allow any vercel deployment for convenience (production frontend is hosted on Vercel)
+    if (origin.endsWith('.vercel.app') || origin.includes('.vercel.app')) return true;
     if (origin.includes('github.dev') || origin.includes('githubusercontent.com')) return true;
     if (origin.includes('localhost')) return true;
+    // Also allow explicit FRONTEND_URL env var
+    if (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL) return true;
     return false;
   })();
 
@@ -42,6 +45,9 @@ app.use((req, res, next) => {
   // If the origin is allowed, echo it back explicitly.
   if (origin && isAllowedOrigin) {
     res.header('Access-Control-Allow-Origin', origin);
+  } else if (!origin && process.env.NODE_ENV !== 'production') {
+    // Development fallback
+    res.header('Access-Control-Allow-Origin', '*');
   }
 
   res.header('Vary', 'Origin');
@@ -52,8 +58,11 @@ app.use((req, res, next) => {
 
   // Respond immediately to preflight requests for allowed origins
   if (req.method === 'OPTIONS') {
-    if (isAllowedOrigin) return res.sendStatus(204);
-    console.warn('🚫 CORS preflight blocked for origin:', origin);
+    if (isAllowedOrigin) {
+      console.log('✅ CORS preflight OK for origin:', origin);
+      return res.sendStatus(204);
+    }
+    console.warn('🚫 CORS preflight blocked for origin:', origin, 'headers:', req.headers);
     return res.status(403).json({ success: false, message: 'Origin not allowed' });
   }
 

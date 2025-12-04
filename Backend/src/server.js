@@ -6,6 +6,7 @@
 
 require('dotenv').config();
 const express = require('express');
+const compression = require('compression');
 const connectDB = require('./config/database');
 const { errorHandler } = require('./middleware/errorHandler');
 
@@ -57,6 +58,11 @@ app.use((req, res, next) => {
   res.header('Access-Control-Max-Age', '86400'); // 24 hours
 
   // Respond immediately to preflight requests for allowed origins
+app.use(compression());
+
+// Parse JSON/urlencoded
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
   if (req.method === 'OPTIONS') {
     if (isAllowedOrigin) {
       console.log('✅ CORS preflight OK for origin:', origin);
@@ -96,6 +102,18 @@ app.use((req, res, next) => {
 app.use('/uploads', express.static('uploads'));
 
 // Request logging middleware
+
+// Debug endpoint - echoes headers and basic timing info
+app.get('/api/debug/echo', (req, res) => {
+  const info = {
+    origin: req.get('origin') || null,
+    host: req.get('host'),
+    headers: req.headers,
+    time: new Date().toISOString(),
+  };
+
+  res.json({ success: true, info });
+});
 app.use((req, res, next) => {
   console.log(`📨 ${req.method} ${req.path} from ${req.get('origin') || 'unknown'}`);
   

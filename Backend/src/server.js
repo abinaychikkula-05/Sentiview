@@ -56,13 +56,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With');
   res.header('Access-Control-Max-Age', '86400'); // 24 hours
-
-  // Respond immediately to preflight requests for allowed origins
-app.use(compression());
-
-// Parse JSON/urlencoded
-app.use(express.json({ limit: '1mb' }));
-app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+  // Handle preflight requests early
   if (req.method === 'OPTIONS') {
     if (isAllowedOrigin) {
       console.log('✅ CORS preflight OK for origin:', origin);
@@ -79,6 +73,11 @@ app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
   next();
 });
+
+// Use compression and parsers AFTER the CORS decision above
+app.use(compression());
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
 // Middleware
 app.use(express.json());
@@ -101,6 +100,18 @@ app.use((req, res, next) => {
 // Serve uploaded files
 app.use('/uploads', express.static('uploads'));
 
+// Serve a minimal favicon from backend to avoid accidental 403s
+app.get('/favicon.svg', (req, res) => {
+  const svg = `<?xml version="1.0" encoding="UTF-8"?>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+    <rect width="64" height="64" rx="8" fill="#111827"/>
+    <text x="50%" y="54%" font-size="28" fill="#fff" text-anchor="middle" font-family="Arial">S</text>
+  </svg>`;
+  res.setHeader('Content-Type', 'image/svg+xml');
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  return res.status(200).send(svg);
+});
+
 // Request logging middleware
 
 // Debug endpoint - echoes headers and basic timing info
@@ -113,6 +124,29 @@ app.get('/api/debug/echo', (req, res) => {
   };
 
   res.json({ success: true, info });
+});
+
+// Permissive debug trace endpoint (temporary): accepts OPTIONS + POST and echoes headers
+app.options('/api/debug/trace', (req, res) => {
+  // Allow any origin for tracing; will be removed after debugging
+  res.header('Access-Control-Allow-Origin', req.get('origin') || '*');
+  res.header('Access-Control-Allow-Methods', 'POST,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  return res.sendStatus(204);
+});
+
+app.post('/api/debug/trace', (req, res) => {
+  console.log('🔧 /api/debug/trace called. Origin:', req.get('origin'));
+  const payload = {
+    origin: req.get('origin') || null,
+    headers: req.headers,
+    body: req.body,
+    time: new Date().toISOString(),
+  };
+  res.header('Access-Control-Allow-Origin', req.get('origin') || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  return res.json({ success: true, payload });
 });
 app.use((req, res, next) => {
   console.log(`📨 ${req.method} ${req.path} from ${req.get('origin') || 'unknown'}`);

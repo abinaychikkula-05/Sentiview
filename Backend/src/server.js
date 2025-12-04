@@ -28,15 +28,18 @@ app.use((req, res, next) => {
   const origin = req.get('origin');
   
   // Allow all Vercel deployments, localhost, and GitHub Codespaces
-  const isAllowedOrigin = !origin || 
-    allowedOrigins.includes(origin) || 
-    origin.endsWith('.vercel.app') ||
-    origin.includes('github.dev') ||
-    origin.includes('githubusercontent.com') ||
-    origin.includes('localhost');
+  const isAllowedOrigin = (() => {
+    if (!origin) return true; // allow non-browser requests (e.g., curl)
+    if (allowedOrigins.includes(origin)) return true;
+    if (origin.endsWith('.vercel.app')) return true;
+    if (origin.includes('github.dev') || origin.includes('githubusercontent.com')) return true;
+    if (origin.includes('localhost')) return true;
+    return false;
+  })();
 
-  console.log(`🔍 CORS Check: Origin=${origin}, Allowed=${isAllowedOrigin}`);
+  console.log(`🔍 CORS Check: Origin=${origin || 'none'}, Allowed=${isAllowedOrigin}`);
 
+  // If the origin is allowed, echo it back explicitly.
   if (origin && isAllowedOrigin) {
     res.header('Access-Control-Allow-Origin', origin);
   }
@@ -47,16 +50,11 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With');
   res.header('Access-Control-Max-Age', '86400'); // 24 hours
 
+  // Respond immediately to preflight requests for allowed origins
   if (req.method === 'OPTIONS') {
-    // Always respond 204 to OPTIONS if origin is allowed
-    if (isAllowedOrigin) {
-      return res.sendStatus(204);
-    }
-    // If not allowed, we still might want to return 204 but without the Allow-Origin header
-    // to prevent browser errors, but standard is 403. 
-    // Let's stick to 204 but without the header if we want to be silent, 
-    // or 403 if we want to be strict. 
-    // Given the user's issue, let's be strict on 403 only if we are SURE it's bad.
+    if (isAllowedOrigin) return res.sendStatus(204);
+    console.warn('🚫 CORS preflight blocked for origin:', origin);
+    return res.status(403).json({ success: false, message: 'Origin not allowed' });
   }
 
   if (!isAllowedOrigin) {
@@ -144,4 +142,10 @@ module.exports = app;
 process.on('unhandledRejection', (err) => {
   console.log(`Error: ${err.message}`);
   process.exit(1);
+});
+
+// Catch uncaught exceptions to avoid unexpected process exit
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  // Do NOT exit immediately in development — log and attempt to continue
 });

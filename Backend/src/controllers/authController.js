@@ -73,6 +73,19 @@ exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
+    // Debug logging: log incoming request headers for troubleshooting CORS/fetch failures
+    try {
+      console.log('🔐 Login attempt - headers:', {
+        origin: req.get('origin'),
+        host: req.get('host'),
+        'user-agent': req.get('user-agent'),
+        'content-type': req.get('content-type'),
+        authorization: req.get('authorization'),
+      });
+    } catch (hdrErr) {
+      console.warn('Could not read headers for login debug:', hdrErr.message);
+    }
+
     // Validation
     if (!email || !password) {
       return res.status(400).json({
@@ -101,6 +114,9 @@ exports.login = async (req, res, next) => {
 
     const token = generateToken(user._id, user.role);
 
+    // Log successful login event (without sensitive data)
+    console.log(`✅ Login success for user ${user.email} (${user._id})`);
+
     res.status(200).json({
       success: true,
       token,
@@ -113,6 +129,7 @@ exports.login = async (req, res, next) => {
       },
     });
   } catch (error) {
+    console.error('❌ Login error (caught):', error && error.stack ? error.stack : error);
     next(error);
   }
 };

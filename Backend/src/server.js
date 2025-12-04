@@ -102,6 +102,16 @@ app.use((req, res, next) => {
   // Set timeout for requests
   req.setTimeout(30000); // 30 seconds
   
+  // Log response info on finish for debugging CORS issues seen by browsers
+  res.on('finish', () => {
+    try {
+      const acaOrigin = res.getHeader('Access-Control-Allow-Origin');
+      console.log(`📤 Response: ${req.method} ${req.path} -> ${res.statusCode} (ACAO: ${acaOrigin || 'none'})`);
+    } catch (err) {
+      console.warn('Could not read response header for logging:', err.message);
+    }
+  });
+
   next();
 });
 

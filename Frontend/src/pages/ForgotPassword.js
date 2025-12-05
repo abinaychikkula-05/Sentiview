@@ -33,6 +33,10 @@ const ForgotPassword = () => {
   // oldPassword removed from ForgotPassword UI — moved to ResetPassword page
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [otp, setOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [resetToken, setResetToken] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
@@ -47,15 +51,48 @@ const ForgotPassword = () => {
       return;
     }
 
+    // Send OTP to provided mobile for verification
     setLoading(true);
     try {
-      // For the forgot-password flow we only verify the presence of username and email
-      // and advance to the next step. A secure email/token flow should be used in
-      // production instead of relying on passwords for verification.
-      setSuccess('Identity verified locally. Enter your new password.');
-      setStep(2);
+      const resp = await axios.post(`${getAPIUrl()}/api/auth/send-otp`, {
+        username,
+        email,
+        mobile,
+      });
+      if (resp.data.success) {
+        setSuccess('OTP sent to mobile. Enter the code to verify.');
+        setOtpSent(true);
+      }
     } catch (err) {
-      setError(err.response?.data?.message || 'Verification failed. Please check your credentials.');
+      setError(err.response?.data?.message || 'Failed to send OTP.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    if (!otp) {
+      setError('Please enter the OTP');
+      return;
+    }
+    setLoading(true);
+    try {
+      const resp = await axios.post(`${getAPIUrl()}/api/auth/verify-otp`, {
+        username,
+        email,
+        mobile,
+        otp,
+      });
+      if (resp.data.success) {
+        setSuccess('OTP verified. You can now set a new password.');
+        setResetToken(resp.data.resetToken || '');
+        setStep(2);
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'OTP verification failed.');
     } finally {
       setLoading(false);
     }
@@ -151,11 +188,40 @@ const ForgotPassword = () => {
                 />
               </div>
 
-              {/* Current password removed from forgot-password flow */}
+              <div className="form-group">
+                <label htmlFor="mobile">Mobile Number</label>
+                <input
+                  type="tel"
+                  id="mobile"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                  required
+                  placeholder="+1234567890"
+                />
+              </div>
 
-              <button type="submit" className="btn btn-primary" disabled={loading}>
-                {loading ? 'Verifying...' : 'Verify Identity'}
-              </button>
+              {otpSent && (
+                <div className="form-group">
+                  <label htmlFor="otp">OTP</label>
+                  <input
+                    type="text"
+                    id="otp"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    placeholder="Enter OTP"
+                  />
+                </div>
+              )}
+
+              {!otpSent ? (
+                <button type="submit" className="btn btn-primary" disabled={loading}>
+                  {loading ? 'Sending OTP...' : 'Send OTP'}
+                </button>
+              ) : (
+                <button type="button" className="btn btn-primary" disabled={loading} onClick={handleVerifyOtp}>
+                  {loading ? 'Verifying OTP...' : 'Verify OTP'}
+                </button>
+              )}
             </form>
           ) : (
             <form onSubmit={handleResetPassword} className="auth-form">

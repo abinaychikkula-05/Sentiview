@@ -6,6 +6,17 @@
 const User = require('../models/User');
 const { generateToken } = require('../middleware/auth');
 const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+let twilioClient = null;
+if (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) {
+  try {
+    const twilio = require('twilio');
+    twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+  } catch (e) {
+    console.warn('Twilio client not available:', e.message);
+    twilioClient = null;
+  }
+}
 
 /**
  * Register a new user
@@ -316,15 +327,33 @@ exports.sendOTP = async (req, res, next) => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const expires = Date.now() + 10 * 60 * 1000; // 10 minutes
 
-    user.resetOTP = otp;
+    // Hash OTP before storing
+    const saltRounds = 10;
+    const hashedOtp = await bcrypt.hash(otp, saltRounds);
+
+    user.resetOTP = hashedOtp;
     user.resetOTPExpires = new Date(expires);
     user.mobile = mobile;
     await user.save();
 
-    // TODO: Integrate with SMS provider (Twilio) to send the OTP.
-    console.log(`🔐 OTP for ${user.email} (${mobile}): ${otp} (expires in 10m)`);
+    // Send SMS via Twilio if configured
+    if (twilioClient && process.env.TWILIO_FROM_NUMBER) {
+      try {
+        await twilioClient.messages.create({
+          body: `Your SentiView password reset code is: ${otp}. It expires in 10 minutes.`,
+          from: process.env.TWILIO_FROM_NUMBER,
+          to: mobile,
+        });
+        console.log(`🔐 OTP sent via Twilio to ${mobile}`);
+      } catch (smsErr) {
+        console.error('Failed to send OTP via Twilio:', smsErr && smsErr.message ? smsErr.message : smsErr);
+      }
+    } else {
+      // Development fallback — log OTP to server logs
+      console.log(`🔐 OTP for ${user.email} (${mobile}): ${otp} (expires in 10m)`);
+    }
 
-    res.status(200).json({ success: true, message: 'OTP sent (simulated). Check server logs for OTP during development.' });
+    res.status(200).json({ success: true, message: 'OTP sent. If Twilio is configured the code was sent via SMS.' });
   } catch (error) {
     next(error);
   }
@@ -351,7 +380,9 @@ exports.verifyOTP = async (req, res, next) => {
       return res.status(401).json({ success: false, message: 'OTP expired or not found' });
     }
 
-    if (user.resetOTP !== otp) {
+    // Compare hashed OTP
+    const isMatch = await bcrypt.compare(otp, user.resetOTP);
+    if (!isMatch) {
       return res.status(401).json({ success: false, message: 'Invalid OTP' });
     }
 

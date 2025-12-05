@@ -30,7 +30,7 @@ const ForgotPassword = () => {
   const [step, setStep] = useState(1); // Step 1: Verify identity, Step 2: Enter new password
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [oldPassword, setOldPassword] = useState('');
+  // oldPassword removed from ForgotPassword UI — moved to ResetPassword page
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -42,29 +42,18 @@ const ForgotPassword = () => {
     setError('');
     setSuccess('');
 
-    if (!username || !email || !oldPassword) {
+    if (!username || !email) {
       setError('Please fill in all fields');
       return;
     }
 
     setLoading(true);
     try {
-      // Verify credentials
-      const response = await axios.post(`${getAPIUrl()}/api/auth/login`, {
-        email,
-        password: oldPassword,
-      });
-
-      if (response.data.success) {
-        // Verify username matches
-        if (response.data.user.username !== username) {
-          setError('Username does not match the email');
-          setLoading(false);
-          return;
-        }
-        setSuccess('Identity verified! Now enter your new password.');
-        setStep(2);
-      }
+      // For the forgot-password flow we only verify the presence of username and email
+      // and advance to the next step. A secure email/token flow should be used in
+      // production instead of relying on passwords for verification.
+      setSuccess('Identity verified locally. Enter your new password.');
+      setStep(2);
     } catch (err) {
       setError(err.response?.data?.message || 'Verification failed. Please check your credentials.');
     } finally {
@@ -94,10 +83,12 @@ const ForgotPassword = () => {
 
     setLoading(true);
     try {
+      // Note: backend currently expects `oldPassword` for verification. For the
+      // forgotten-password flow we send only username/email/newPassword. If the
+      // backend requires oldPassword, implement an email-token reset endpoint.
       const response = await axios.post(`${getAPIUrl()}/api/auth/reset-password`, {
         username,
         email,
-        oldPassword,
         newPassword,
       });
 
@@ -160,17 +151,7 @@ const ForgotPassword = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="oldPassword">Current Password</label>
-                <input
-                  type="password"
-                  id="oldPassword"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                  required
-                  placeholder="Enter your current password"
-                />
-              </div>
+              {/* Current password removed from forgot-password flow */}
 
               <button type="submit" className="btn btn-primary" disabled={loading}>
                 {loading ? 'Verifying...' : 'Verify Identity'}

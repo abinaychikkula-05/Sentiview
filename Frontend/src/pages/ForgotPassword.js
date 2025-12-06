@@ -33,7 +33,7 @@ const ForgotPassword = () => {
   // oldPassword removed from ForgotPassword UI — moved to ResetPassword page
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [mobile, setMobile] = useState('');
+  // mobile removed from UI; server will use stored user.mobile when available
   const [otp, setOtp] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [resetToken, setResetToken] = useState('');
@@ -57,7 +57,6 @@ const ForgotPassword = () => {
       const resp = await axios.post(`${getAPIUrl()}/api/auth/send-otp`, {
         username,
         email,
-        mobile,
       });
       if (resp.data.success) {
         setSuccess('OTP sent to mobile. Enter the code to verify.');
@@ -83,7 +82,6 @@ const ForgotPassword = () => {
       const resp = await axios.post(`${getAPIUrl()}/api/auth/verify-otp`, {
         username,
         email,
-        mobile,
         otp,
       });
       if (resp.data.success) {
@@ -185,18 +183,6 @@ const ForgotPassword = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="Enter your email"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="mobile">Mobile Number</label>
-                <input
-                  type="tel"
-                  id="mobile"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
-                  required
-                  placeholder="+1234567890"
                 />
               </div>
 

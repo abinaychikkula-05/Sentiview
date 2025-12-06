@@ -314,13 +314,18 @@ exports.resetPassword = async (req, res, next) => {
 exports.sendOTP = async (req, res, next) => {
   try {
     const { username, email, mobile } = req.body;
-    if (!username || !email || !mobile) {
-      return res.status(400).json({ success: false, message: 'username, email and mobile required' });
+    if (!username || !email) {
+      return res.status(400).json({ success: false, message: 'username and email required' });
     }
 
     const user = await User.findOne({ username, email });
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    // Determine destination mobile: prefer provided mobile, otherwise use stored user.mobile
+    const destMobile = mobile || user.mobile;
+    if (!destMobile) {
+      return res.status(400).json({ success: false, message: 'No mobile number provided or on record for this user' });
     }
 
     // Generate 6-digit OTP
@@ -333,7 +338,8 @@ exports.sendOTP = async (req, res, next) => {
 
     user.resetOTP = hashedOtp;
     user.resetOTPExpires = new Date(expires);
-    user.mobile = mobile;
+    // If caller provided a mobile, update the stored mobile
+    if (mobile) user.mobile = mobile;
     await user.save();
 
     // Send SMS via Twilio if configured
@@ -342,15 +348,15 @@ exports.sendOTP = async (req, res, next) => {
         await twilioClient.messages.create({
           body: `Your SentiView password reset code is: ${otp}. It expires in 10 minutes.`,
           from: process.env.TWILIO_FROM_NUMBER,
-          to: mobile,
+          to: destMobile,
         });
-        console.log(`🔐 OTP sent via Twilio to ${mobile}`);
+        console.log(`🔐 OTP sent via Twilio to ${destMobile}`);
       } catch (smsErr) {
         console.error('Failed to send OTP via Twilio:', smsErr && smsErr.message ? smsErr.message : smsErr);
       }
     } else {
       // Development fallback — log OTP to server logs
-      console.log(`🔐 OTP for ${user.email} (${mobile}): ${otp} (expires in 10m)`);
+      console.log(`🔐 OTP for ${user.email} (${destMobile}): ${otp} (expires in 10m)`);
     }
 
     res.status(200).json({ success: true, message: 'OTP sent. If Twilio is configured the code was sent via SMS.' });
@@ -366,9 +372,9 @@ exports.sendOTP = async (req, res, next) => {
  */
 exports.verifyOTP = async (req, res, next) => {
   try {
-    const { username, email, mobile, otp } = req.body;
-    if (!username || !email || !mobile || !otp) {
-      return res.status(400).json({ success: false, message: 'username, email, mobile and otp required' });
+    const { username, email, otp } = req.body;
+    if (!username || !email || !otp) {
+      return res.status(400).json({ success: false, message: 'username, email and otp required' });
     }
 
     const user = await User.findOne({ username, email }).select('+resetOTP resetOTPExpires');

@@ -27,79 +27,25 @@ const getAPIUrl = () => {
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const [step, setStep] = useState(1); // Step 1: Verify identity, Step 2: Enter new password
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  // oldPassword removed from ForgotPassword UI — moved to ResetPassword page
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  // mobile removed from UI; server will use stored user.mobile when available
-  const [otp, setOtp] = useState('');
-  const [otpSent, setOtpSent] = useState(false);
-  const [resetToken, setResetToken] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleVerifyIdentity = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
 
-    if (!username || !email) {
-      setError('Please fill in all fields');
-      return;
-    }
-
-    // Send OTP to provided mobile for verification
-    setLoading(true);
-    try {
-      const resp = await axios.post(`${getAPIUrl()}/api/auth/send-otp`, {
-        username,
-        email,
-      });
-      if (resp.data.success) {
-        setSuccess('OTP sent to mobile. Enter the code to verify.');
-        setOtpSent(true);
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || 'Failed to send OTP.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
-    if (!otp) {
-      setError('Please enter the OTP');
-      return;
-    }
-    setLoading(true);
-    try {
-      const resp = await axios.post(`${getAPIUrl()}/api/auth/verify-otp`, {
-        username,
-        email,
-        otp,
-      });
-      if (resp.data.success) {
-        setSuccess('OTP verified. You can now set a new password.');
-        setResetToken(resp.data.resetToken || '');
-        setStep(2);
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || 'OTP verification failed.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+
+    if (!username || !email) {
+      setError('Please provide username and email');
+      return;
+    }
 
     if (!newPassword || !confirmPassword) {
       setError('Please fill in all password fields');
@@ -118,9 +64,7 @@ const ForgotPassword = () => {
 
     setLoading(true);
     try {
-      // Note: backend currently expects `oldPassword` for verification. For the
-      // forgotten-password flow we send only username/email/newPassword. If the
-      // backend requires oldPassword, implement an email-token reset endpoint.
+      // Sending username/email/newPassword to backend reset endpoint.
       const response = await axios.post(`${getAPIUrl()}/api/auth/reset-password`, {
         username,
         email,
@@ -132,6 +76,8 @@ const ForgotPassword = () => {
         setTimeout(() => {
           navigate('/login');
         }, 2000);
+      } else {
+        setError(response.data.message || 'Password reset failed.');
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Password reset failed. Please try again.');
@@ -153,13 +99,12 @@ const ForgotPassword = () => {
           <p className="auth-subtitle">Verify your identity to recover access</p>
           <Link to="/login" className="back-home-link" style={{ display: 'block', marginBottom: '20px', color: '#64748b', textDecoration: 'none', fontSize: '14px' }}>← Back to Login</Link>
           
-          {step === 1 ? (
-            <form onSubmit={handleVerifyIdentity} className="auth-form">
+            <form onSubmit={handleResetPassword} className="auth-form">
               {error && <div className="error-message">{error}</div>}
               {success && <div className="success-message">{success}</div>}
-              
+
               <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '15px' }}>
-                We'll send a verification code to the mobile number on file for this account.
+                Provide your account username and email, then enter a new password.
               </p>
 
               <div className="form-group">
@@ -185,38 +130,6 @@ const ForgotPassword = () => {
                   placeholder="Enter your email"
                 />
               </div>
-
-              {otpSent && (
-                <div className="form-group">
-                  <label htmlFor="otp">OTP</label>
-                  <input
-                    type="text"
-                    id="otp"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    placeholder="Enter OTP"
-                  />
-                </div>
-              )}
-
-              {!otpSent ? (
-                <button type="submit" className="btn btn-primary" disabled={loading}>
-                  {loading ? 'Sending code...' : 'Send verification code'}
-                </button>
-              ) : (
-                <button type="button" className="btn btn-primary" disabled={loading} onClick={handleVerifyOtp}>
-                  {loading ? 'Verifying...' : 'Verify code'}
-                </button>
-              )}
-            </form>
-          ) : (
-            <form onSubmit={handleResetPassword} className="auth-form">
-              {error && <div className="error-message">{error}</div>}
-              {success && <div className="success-message">{success}</div>}
-              
-              <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '15px' }}>
-                Identity verified! Enter your new password below.
-              </p>
 
               <div className="form-group">
                 <label htmlFor="newPassword">New Password</label>
@@ -245,21 +158,7 @@ const ForgotPassword = () => {
               <button type="submit" className="btn btn-primary" disabled={loading}>
                 {loading ? 'Resetting...' : 'Reset Password'}
               </button>
-
-              <button 
-                type="button" 
-                className="btn btn-secondary" 
-                onClick={() => {
-                  setStep(1);
-                  setError('');
-                  setSuccess('');
-                }}
-                style={{ marginTop: '10px', backgroundColor: '#999' }}
-              >
-                Back to Verify
-              </button>
             </form>
-          )}
         </div>
       </div>
     </div>

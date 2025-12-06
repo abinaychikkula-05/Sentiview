@@ -234,20 +234,21 @@ exports.setup = async (req, res, next) => {
 /**
  * Reset password with verification
  * POST /api/auth/reset-password
- * Requires: username, email, oldPassword, newPassword
+ * Accepts: username, email, newPassword
+ * Optional: oldPassword OR resetToken. If neither provided, the endpoint
+ * will perform a direct reset when username+email match (less secure).
  */
 exports.resetPassword = async (req, res, next) => {
   try {
     const { username, email, oldPassword, newPassword, resetToken } = req.body;
 
-    // Validation
-    // Allow two flows: standard (oldPassword present) OR token-based (resetToken present)
-    if (!username || !email || !newPassword || (!oldPassword && !resetToken)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide all required fields',
-      });
-    }
+      // Validation: require basic fields (username, email, newPassword)
+      if (!username || !email || !newPassword) {
+        return res.status(400).json({
+          success: false,
+          message: 'Please provide username, email and newPassword',
+        });
+      }
 
     // Validate new password length
     if (newPassword.length < 6) {
@@ -277,8 +278,8 @@ exports.resetPassword = async (req, res, next) => {
       if (user.resetToken !== resetToken || user.resetTokenExpires < Date.now()) {
         return res.status(401).json({ success: false, message: 'Reset token invalid or expired' });
       }
-    } else {
-      // Verify old password
+    } else if (oldPassword) {
+      // Verify old password when provided
       const isMatch = await user.matchPassword(oldPassword);
       if (!isMatch) {
         return res.status(401).json({
@@ -286,6 +287,9 @@ exports.resetPassword = async (req, res, next) => {
           message: 'Old password is incorrect',
         });
       }
+    } else {
+      // Direct reset (less secure) — username+email matched the user record
+      console.warn(`⚠️ Direct password reset used for user ${user.email} (${user._id}). Consider using token-based or authenticated reset in production.`);
     }
 
     // Update password

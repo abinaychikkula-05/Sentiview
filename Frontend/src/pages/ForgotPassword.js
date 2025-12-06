@@ -149,8 +149,8 @@ const ForgotPassword = () => {
       </div>
       <div className="split-right">
         <div className="auth-box">
-          <h1 className="auth-title">Reset Password</h1>
-          <p className="auth-subtitle">Recover your account access</p>
+          <h1 className="auth-title">Forgot Password</h1>
+          <p className="auth-subtitle">Verify your identity to recover access</p>
           <Link to="/login" className="back-home-link" style={{ display: 'block', marginBottom: '20px', color: '#64748b', textDecoration: 'none', fontSize: '14px' }}>← Back to Login</Link>
           
           {step === 1 ? (
@@ -159,7 +159,7 @@ const ForgotPassword = () => {
               {success && <div className="success-message">{success}</div>}
               
               <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '15px' }}>
-                Please verify your identity to reset your password
+                We'll send a verification code to the mobile number on file for this account.
               </p>
 
               <div className="form-group">
@@ -201,11 +201,11 @@ const ForgotPassword = () => {
 
               {!otpSent ? (
                 <button type="submit" className="btn btn-primary" disabled={loading}>
-                  {loading ? 'Sending OTP...' : 'Send OTP'}
+                  {loading ? 'Sending code...' : 'Send verification code'}
                 </button>
               ) : (
                 <button type="button" className="btn btn-primary" disabled={loading} onClick={handleVerifyOtp}>
-                  {loading ? 'Verifying OTP...' : 'Verify OTP'}
+                  {loading ? 'Verifying...' : 'Verify code'}
                 </button>
               )}
             </form>

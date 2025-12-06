@@ -201,7 +201,8 @@ const Dashboard = () => {
           <div className="feedback-section">
             <div className="section-header">
               <h2>Recent Feedback</h2>
-              <div className="filter-buttons">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div className="filter-buttons">
                 {['All', 'Positive', 'Negative', 'Neutral'].map((sentiment) => (
                   <button
                     key={sentiment}
@@ -211,6 +212,121 @@ const Dashboard = () => {
                     {sentiment}
                   </button>
                 ))}
+                </div>
+                <div style={{ display: 'flex', gap: '8px', marginLeft: '12px' }}>
+                  <button
+                    className="btn btn-ghost"
+                    onClick={() => {
+                      // export CSV
+                      try {
+                        const rows = filteredFeedback.map((item) => ({
+                          Client: item.clientName || 'Anonymous',
+                          Category: item.category || '',
+                          Date: new Date(item.createdAt).toLocaleString(),
+                          Sentiment: item.sentiment?.label || '',
+                          Score: item.sentiment?.score != null ? (item.sentiment.score * 100).toFixed(0) : '',
+                          Rating: item.rating || '',
+                          Feedback: item.feedback || '',
+                        }));
+
+                        const header = Object.keys(rows[0] || { Client: 'Client' });
+                        const csv = [header.join(',')].concat(
+                          rows.map((r) => header.map((h) => `"${String(r[h] || '')}"`).join(','))
+                        ).join('\n');
+
+                        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        const now = new Date();
+                        const fname = `feedback-${now.toISOString().slice(0,10)}.csv`;
+                        a.setAttribute('download', fname);
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        URL.revokeObjectURL(url);
+                      } catch (err) {
+                        console.error('Export CSV failed', err);
+                      }
+                    }}
+                  >
+                    Export CSV
+                  </button>
+
+                  <button
+                    className="btn btn-ghost"
+                    onClick={() => {
+                      // export PDF via printable window
+                      try {
+                        const now = new Date();
+                        const title = `SentiView Feedback - ${now.toLocaleDateString()}`;
+                        const rows = filteredFeedback;
+                        const html = `
+                          <html>
+                            <head>
+                              <title>${title}</title>
+                              <style>
+                                body { font-family: Arial, sans-serif; margin: 20px; }
+                                h1 { font-size: 18px; }
+                                table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+                                th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+                                th { background: #f4f4f4; }
+                                .feedback-cell { white-space: pre-wrap; max-width: 400px; }
+                              </style>
+                            </head>
+                            <body>
+                              <h1>${title}</h1>
+                              <table>
+                                <thead>
+                                  <tr>
+                                    <th>Client</th>
+                                    <th>Category</th>
+                                    <th>Date</th>
+                                    <th>Sentiment</th>
+                                    <th>Score</th>
+                                    <th>Rating</th>
+                                    <th>Feedback</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  ${rows.map((item) => `
+                                    <tr>
+                                      <td>${(item.clientName || 'Anonymous')}</td>
+                                      <td>${(item.category || '')}</td>
+                                      <td>${new Date(item.createdAt).toLocaleString()}</td>
+                                      <td>${item.sentiment?.label || ''}</td>
+                                      <td>${item.sentiment?.score != null ? (item.sentiment.score * 100).toFixed(0) + '%' : ''}</td>
+                                      <td>${item.rating || ''}</td>
+                                      <td class="feedback-cell">${(item.feedback || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</td>
+                                    </tr>
+                                  `).join('')}
+                                </tbody>
+                              </table>
+                            </body>
+                          </html>
+                        `;
+
+                        const win = window.open('', '_blank');
+                        if (!win) {
+                          alert('Unable to open print window. Please allow popups for this site.');
+                          return;
+                        }
+                        win.document.open();
+                        win.document.write(html);
+                        win.document.close();
+                        // Wait for content to render then print
+                        setTimeout(() => {
+                          win.focus();
+                          win.print();
+                        }, 500);
+                      } catch (err) {
+                        console.error('Export PDF failed', err);
+                      }
+                    }}
+                  >
+                    Export PDF
+                  </button>
+                </div>
               </div>
             </div>
             

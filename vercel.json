@@ -1,14 +1,18 @@
 {
   "version": 2,
-  "buildCommand": "cd Frontend && npm install && npm run build",
-  "outputDirectory": "Frontend/build",
-  "functions": {
-    "Backend/index.js": {
-      "runtime": "@vercel/node@3",
-      "includeFiles": "Backend/**"
+  "builds": [
+    {
+      "src": "Backend/index.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "Frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "build" }
     }
-  },
-  "rewrites": [
-    { "source": "/api/:path*", "destination": "/Backend/index.js" }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/Backend/index.js" },
+    { "src": "/(.*)", "dest": "/Frontend/$1" }
   ]
 }

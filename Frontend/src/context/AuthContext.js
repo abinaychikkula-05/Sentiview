@@ -19,6 +19,23 @@ export const AuthProvider = ({ children }) => {
     // Set CORS credentials to include
     // axios.defaults.withCredentials = true; // Disabled to prevent CORS issues on strict networks
     console.log('✅ Axios configured');
+
+    const interceptorId = axios.interceptors.request.use((config) => {
+      try {
+        const storedToken = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+        if (storedToken && (!config.headers || !config.headers.Authorization)) {
+          config.headers = config.headers || {};
+          config.headers.Authorization = `Bearer ${storedToken}`;
+        }
+      } catch (err) {
+        console.warn('Unable to inject auth token into request:', err);
+      }
+      return config;
+    });
+
+    return () => {
+      axios.interceptors.request.eject(interceptorId);
+    };
   }, []);
 
   // Set default axios header when token changes

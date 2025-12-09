@@ -39,10 +39,21 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { proxy = [] } = req.query;
+    const { proxy = [], ...query } = req.query;
     const pathSegments = Array.isArray(proxy) ? proxy : [proxy];
     const targetPath = pathSegments.join('/');
-    const targetUrl = `https://airy-tranquility-production-da57.up.railway.app/api/${targetPath}`;
+
+    const searchParams = new URLSearchParams();
+    for (const [key, value] of Object.entries(query)) {
+      if (Array.isArray(value)) {
+        value.forEach((v) => searchParams.append(key, v));
+      } else if (value !== undefined) {
+        searchParams.append(key, value);
+      }
+    }
+
+    const queryString = searchParams.toString();
+    const targetUrl = `https://airy-tranquility-production-da57.up.railway.app/api/${targetPath}${queryString ? `?${queryString}` : ''}`;
 
     const headers = sanitizeHeaders(req.headers);
     const init = {

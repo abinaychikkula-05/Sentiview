@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "Backend/index.js",
+      "src": "api/[...proxy].js",
       "use": "@vercel/node"
     },
     {
@@ -12,7 +12,9 @@
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/Backend/index.js" },
-    { "src": "/(.*)", "dest": "/Frontend/$1" }
+    { "src": "/api/(.*)", "dest": "/api/[...proxy].js" },
+    { "src": "/static/(.*)", "dest": "/Frontend/static/$1" },
+    { "src": "/(.*)\\.(png|jpg|jpeg|gif|ico|svg|json|css|js)", "dest": "/Frontend/$1.$2" },
+    { "src": "/(.*)", "dest": "/Frontend/index.html" }
   ]
 }

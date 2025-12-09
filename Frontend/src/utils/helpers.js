@@ -42,20 +42,10 @@ export const getAPIUrl = () => {
     return process.env.REACT_APP_BACKEND_URL;
   }
 
-  const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
-
-  // Development - use relative path for proxy
-  if (
-    hostname.includes('localhost') || 
-    hostname.includes('127.0.0.1') || 
-    hostname.includes('github.dev') || 
-    hostname.includes('gitpod.io')
-  ) {
-    console.log('🔧 Dev: Using proxy for API requests');
-    return '';
-  }
-  
-  // Production - call Railway backend directly
-  console.log('🔧 Prod: Using Railway backend');
-  return 'https://airy-tranquility-production-da57.up.railway.app';
+  // Always use relative path - Backend is deployed on same Vercel domain
+  // In dev: uses package.json proxy to localhost:5000
+  // In production: uses Vercel rewrites to Backend/index.js
+  console.log('🔧 Using relative path for API (same-origin)');
+  return '';
+};
 };

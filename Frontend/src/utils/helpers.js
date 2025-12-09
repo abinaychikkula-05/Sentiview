@@ -42,8 +42,20 @@ export const getAPIUrl = () => {
     return process.env.REACT_APP_BACKEND_URL;
   }
 
-  // Always use relative path - Backend is deployed on same Vercel domain
-  // In dev: uses package.json proxy to localhost:5000
-  // In production: uses Vercel rewrites to Backend/index.js
-  return '';
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
+
+  // Development (Localhost, Codespaces, Gitpod)
+  // Use relative path to leverage package.json proxy
+  if (
+    hostname.includes('localhost') || 
+    hostname.includes('127.0.0.1') || 
+    hostname.includes('github.dev') || 
+    hostname.includes('gitpod.io')
+  ) {
+    console.log('🔧 Using proxy for API requests');
+    return '';
+  }
+  
+  // Production
+  return 'https://airy-tranquility-production-da57.up.railway.app';
 };

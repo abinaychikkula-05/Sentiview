@@ -115,19 +115,50 @@ const Dashboard = () => {
           </span>
         </div>
         <div className="header-right">
-          <div className="date-display">
-            {currentTime.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
-            <span className="time-separator">•</span>
-            {currentTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+          <div className="header-actions">
+            <div className="date-display">
+              {currentTime.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+              <span className="time-separator">•</span>
+              {currentTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+            </div>
+            <div className="action-buttons">
+              <Link to="/settings" className="btn btn-secondary">
+                Settings
+              </Link>
+              <button className="btn btn-logout" onClick={logout}>
+                Logout
+              </button>
+            </div>
           </div>
-          <Link to="/settings" className="btn btn-secondary">
-            Settings
-          </Link>
-          <button className="btn btn-logout" onClick={logout}>
-            Logout
-          </button>
+          <div className="quick-upload-card">
+            <div className="quick-upload-content">
+              <h3>Add New Feedback</h3>
+              <p>Upload CSV files or enter feedback manually to analyze sentiment instantly.</p>
+              <div className="quick-upload-actions">
+                <button
+                  className="upload-btn"
+                  onClick={() => setShowUpload(!showUpload)}
+                >
+                  {showUpload ? 'Close Upload' : 'Upload Now'}
+                </button>
+                <a
+                  className="download-link"
+                  href="/sample-feedback.csv"
+                  download
+                >
+                  Download Sample CSV
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
+
+      {showUpload && (
+        <div className="upload-panel card-glass">
+          <UploadFeedback onSuccess={handleUploadSuccess} />
+        </div>
+      )}
 
       {/* Stats Grid */}
       {stats && (
@@ -337,26 +368,6 @@ const Dashboard = () => {
             )}
           </div>
         </div>
-
-        {/* Sidebar */}
-        <aside className="sidebar">
-          <div className="upload-card">
-            <h3>Add New Feedback</h3>
-            <p>Upload CSV files or enter feedback manually to analyze sentiment instantly.</p>
-            <button 
-              className="upload-btn"
-              onClick={() => setShowUpload(!showUpload)}
-            >
-              {showUpload ? 'Close Upload' : 'Upload Now'}
-            </button>
-          </div>
-
-          {showUpload && (
-            <div className="card-glass" style={{ padding: '1.5rem', borderRadius: '16px' }}>
-              <UploadFeedback onSuccess={handleUploadSuccess} />
-            </div>
-          )}
-        </aside>
       </div>
       
       {error && <div className="error-message" style={{ marginTop: '2rem' }}>{error}</div>}

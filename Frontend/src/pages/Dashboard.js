@@ -106,56 +106,58 @@ const Dashboard = () => {
       {/* Header */}
       <header className="dashboard-header">
         <div className="header-left">
-          <div className="logo-container">
+          <div className="logo-banner">
             <Logo className="dashboard-logo" />
-            <h1>SentiView</h1>
+            <h1 className="app-name">SentiView</h1>
           </div>
-          <span className="user-info">
-            Welcome back, {user?.username}
-          </span>
+          <span className="welcome-text">Welcome back, {user?.username}</span>
         </div>
         <div className="header-right">
-          <div className="header-actions">
-            <div className="date-display">
-              {currentTime.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
-              <span className="time-separator">•</span>
-              {currentTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
-            </div>
-            <div className="action-buttons">
-              <Link to="/settings" className="btn btn-secondary">
-                Settings
-              </Link>
-              <button className="btn btn-logout" onClick={logout}>
-                Logout
-              </button>
-            </div>
+          <div className="date-display">
+            {currentTime.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+            <span className="time-separator">•</span>
+            {currentTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
           </div>
-          <div className="quick-upload-card">
-            <div className="quick-upload-content">
-              <h3>Add New Feedback</h3>
-              <p>Upload CSV files or enter feedback manually to analyze sentiment instantly.</p>
-              <div className="quick-upload-actions">
-                <button
-                  className="upload-btn"
-                  onClick={() => setShowUpload(!showUpload)}
-                >
-                  {showUpload ? 'Close Upload' : 'Upload Now'}
-                </button>
-                <a
-                  className="download-link"
-                  href="/sample-feedback.csv"
-                  download
-                >
-                  Download Sample CSV
-                </a>
-              </div>
-            </div>
+          <div className="action-buttons">
+            <Link to="/settings" className="btn btn-secondary">
+              Settings
+            </Link>
+            <button className="btn btn-logout" onClick={logout}>
+              Logout
+            </button>
           </div>
         </div>
       </header>
 
+      {/* Add Feedback */}
+      <section className="add-feedback-section">
+        <div className="add-feedback-card">
+          <div className="add-feedback-content">
+            <div>
+              <h2>Add Feedback</h2>
+              <p>Upload new feedback or use the sample template to get started quickly.</p>
+            </div>
+            <div className="add-feedback-actions">
+              <button
+                className="add-feedback-btn"
+                onClick={() => setShowUpload(!showUpload)}
+              >
+                {showUpload ? 'Close Upload' : 'Upload Feedback'}
+              </button>
+              <a
+                className="download-sample-btn"
+                href="/sample-feedback.csv"
+                download
+              >
+                Download Sample CSV
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {showUpload && (
-        <div className="upload-panel card-glass">
+        <div className="upload-panel">
           <UploadFeedback onSuccess={handleUploadSuccess} />
         </div>
       )}

@@ -48,4 +48,3 @@ export const getAPIUrl = () => {
   console.log('🔧 Using relative path for API (same-origin)');
   return '';
 };
-};

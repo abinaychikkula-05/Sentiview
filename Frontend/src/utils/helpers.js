@@ -45,6 +45,5 @@ export const getAPIUrl = () => {
   // Always use relative path - Backend is deployed on same Vercel domain
   // In dev: uses package.json proxy to localhost:5000
   // In production: uses Vercel rewrites to Backend/index.js
-  console.log('🔧 Using relative path for API (same-origin)');
   return '';
 };

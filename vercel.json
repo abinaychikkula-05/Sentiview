@@ -1,7 +1,6 @@
 {
   "version": 2,
-  "installCommand": "npm install && cd Backend && npm install && cd ../Frontend && npm install",
-  "buildCommand": "cd Frontend && npm run build",
+  "buildCommand": "cd Frontend && npm install && npm run build",
   "outputDirectory": "Frontend/build",
   "functions": {
     "Backend/index.js": {

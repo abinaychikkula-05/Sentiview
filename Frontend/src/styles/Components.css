@@ -336,22 +336,22 @@
 
 .chart-container h3 {
   margin: 0 0 15px 0;
-  color: var(--primary-color);
+  color: #000;
   font-size: 16px;
 }
 
 .chart-title.distribution {
-  color: #4CAF50;
+  color: #000;
   font-weight: 700;
 }
 
 .chart-title.breakdown {
-  color: #2196F3;
+  color: #000;
   font-weight: 700;
 }
 
 .chart-title.trend {
-  color: #FF9800;
+  color: #000;
   font-weight: 700;
 }
 
